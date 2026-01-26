@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeevesh R | Strategic Developer</title>
+    <!-- Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,34 +13,36 @@
         body { font-family: 'Inter', sans-serif; background-color: #F9F8F6; color: #1C1917; scroll-behavior: smooth; }
         h1, h2, h3, .display-text { font-family: 'Space Grotesk', sans-serif; }
         .nav-glass { background: rgba(249, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 350px; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 320px; }
         .tab-active { border-bottom: 2px solid #1C1917; color: #1C1917; font-weight: 600; }
         .tab-inactive { color: #A8A29E; border-bottom: 2px solid transparent; }
         .btn-primary { background-color: #1C1917; color: #fff; transition: all 0.3s ease; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .console-box { background: #0C0A09; color: #22C55E; font-family: 'Courier New', monospace; border-radius: 8px; padding: 20px; height: 250px; overflow-y: auto; }
+        .console-box { background: #0C0A09; color: #22C55E; font-family: 'Courier New', monospace; border-radius: 8px; padding: 20px; height: 200px; overflow-y: auto; font-size: 13px; }
     </style>
 </head>
 <body class="antialiased">
 
+    <!-- Navigation -->
     <nav class="nav-glass fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <span class="display-text text-2xl font-bold tracking-tighter">JR.</span>
+            <span class="display-text text-2xl font-bold tracking-tighter cursor-pointer" onclick="scrollToSection('hero')">JR.</span>
             <div class="hidden md:flex space-x-10 text-sm font-medium uppercase tracking-widest">
-                <a href="#hero" class="hover:text-amber-600 transition-colors">Home</a>
-                <a href="#playground" class="hover:text-amber-600 transition-colors">The Lab</a>
-                <a href="#contact" class="hover:text-amber-600 transition-colors">Contact</a>
+                <button onclick="scrollToSection('hero')" class="hover:text-amber-600 transition-colors">Home</button>
+                <button onclick="scrollToSection('playground')" class="hover:text-amber-600 transition-colors">The Lab</button>
+                <button onclick="scrollToSection('contact')" class="hover:text-amber-600 transition-colors">Contact</button>
             </div>
         </div>
     </nav>
 
+    <!-- Hero -->
     <section id="hero" class="min-h-screen flex items-center pt-20 px-6">
         <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
             <div>
                 <span class="text-amber-600 font-bold text-sm tracking-[0.3em] uppercase mb-4 block">Student & Developer</span>
-                <h1 class="text-7xl font-bold leading-[1.1] mb-8 text-stone-900">Jeevesh R.</h1>
+                <h1 class="text-6xl md:text-7xl font-bold leading-[1.1] mb-8 text-stone-900">Jeevesh R.</h1>
                 <p class="text-xl text-stone-600 mb-10 leading-relaxed max-w-lg">
-                    Focusing on turning BCA fundamentals into practical, well-thought-out solutions at the intersection of strategy and execution.
+                    I focus on turning ideas into practical, well-thought-out solutions, working at the intersection of strategy and execution.
                 </p>
                 <div class="flex flex-wrap gap-5">
                     <button onclick="scrollToSection('contact')" class="btn-primary px-10 py-5 rounded-xl font-bold">Connect Now</button>
@@ -47,27 +50,28 @@
                 </div>
             </div>
             <div class="hidden lg:flex justify-center relative">
-                <div class="w-96 h-96 bg-stone-100 rounded-full flex items-center justify-center text-[10rem] shadow-inner relative z-10">
+                <div class="w-80 h-80 bg-stone-100 rounded-full flex items-center justify-center text-[8rem] shadow-inner relative z-10">
                     ⚡
                 </div>
-                <div class="absolute inset-0 border-2 border-dashed border-stone-200 rounded-full animate-[spin_20s_linear_infinite]"></div>
+                <div class="absolute inset-0 border-2 border-dashed border-stone-200 rounded-full animate-[spin_30s_linear_infinite]"></div>
             </div>
         </div>
     </section>
 
+    <!-- Lab -->
     <section id="playground" class="py-32 bg-stone-100">
         <div class="max-w-7xl mx-auto px-6">
             <div class="mb-16">
                 <h2 class="text-4xl font-bold text-stone-900">The Logic Lab</h2>
-                <p class="text-stone-500 mt-4 max-w-xl">Demonstrating real-time system behavior through interactive modules.</p>
+                <p class="text-stone-500 mt-4 max-w-xl">Interactive modules proving the logic behind the code.</p>
             </div>
             
             <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-stone-200">
                 <div class="flex border-b border-stone-100">
-                    <button onclick="switchTab('dsa')" id="tab-dsa" class="tab-active flex-1 py-6 text-sm uppercase tracking-widest">DSA visualizer</button>
-                    <button onclick="switchTab('db')" id="tab-db" class="tab-inactive flex-1 py-6 text-sm uppercase tracking-widest">Live DB Status</button>
+                    <button onclick="switchTab('dsa')" id="tab-dsa" class="tab-active flex-1 py-6 text-xs uppercase tracking-widest">DSA Visualizer</button>
+                    <button onclick="switchTab('db')" id="tab-db" class="tab-inactive flex-1 py-6 text-xs uppercase tracking-widest">Live DB Status</button>
                 </div>
-                <div class="p-10 min-h-[500px] flex flex-col justify-center">
+                <div class="p-8 md:p-12 min-h-[450px] flex flex-col justify-center">
                     <div id="content-dsa" class="block">
                         <div class="chart-container"><canvas id="sortCanvas"></canvas></div>
                         <div class="mt-10 text-center">
@@ -76,7 +80,7 @@
                     </div>
                     <div id="content-db" class="hidden">
                         <div class="console-box" id="db-log">
-                            <span class="text-stone-500">// System initialized...</span><br>
+                            <span class="text-stone-500">// System Check Initialized...</span><br>
                         </div>
                     </div>
                 </div>
@@ -84,89 +88,94 @@
         </div>
     </section>
 
+    <!-- Contact -->
     <section id="contact" class="py-32 bg-white">
         <div class="max-w-3xl mx-auto px-6 text-center">
-            <h2 class="text-5xl font-bold mb-6 text-stone-900">Message Me.</h2>
-            <p class="text-stone-500 mb-12">Send a direct message to my Supabase database.</p>
+            <h2 class="text-5xl font-bold mb-6 text-stone-900">Contact.</h2>
+            <p class="text-stone-500 mb-12">Submit your details to my secure Supabase instance.</p>
             
             <div class="space-y-6 text-left">
                 <div>
-                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2 block">Your Email</label>
-                    <input type="email" id="user-email" placeholder="example@gmail.com" class="w-full p-5 bg-stone-50 border border-stone-100 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500/20 transition-all">
+                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2 block">Email Address</label>
+                    <input type="email" id="user-email" placeholder="name@example.com" class="w-full p-5 bg-stone-50 border border-stone-100 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500/20 transition-all">
                 </div>
                 <div>
-                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2 block">Message</label>
-                    <textarea id="user-message" rows="5" placeholder="I'd like to collaborate on..." class="w-full p-5 bg-stone-50 border border-stone-100 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"></textarea>
+                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2 block">Your Message</label>
+                    <textarea id="user-message" rows="5" placeholder="Let's build something together..." class="w-full p-5 bg-stone-50 border border-stone-100 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"></textarea>
                 </div>
-                <button onclick="sendMessage()" id="send-btn" class="w-full btn-primary py-6 rounded-2xl font-bold text-lg">Send Message</button>
-                <p id="form-status" class="text-center font-medium mt-4"></p>
+                <button onclick="sendMessage()" id="send-btn" class="w-full btn-primary py-6 rounded-2xl font-bold text-lg shadow-lg">Save to Supabase</button>
+                <p id="form-status" class="text-center font-medium mt-6"></p>
             </div>
         </div>
     </section>
 
     <footer class="py-12 border-t border-stone-100 text-center">
-        <p class="text-stone-400 text-sm uppercase tracking-widest">&copy; 2026 Jeevesh R. Strategy & Execution.</p>
+        <p class="text-stone-400 text-xs uppercase tracking-widest">&copy; 2026 Jeevesh R. Strategy & Execution.</p>
     </footer>
 
+    <!-- Logic Script -->
     <script>
-        // --- 1. SUPABASE INITIALIZATION (SINGLE DECLARATION) ---
-        const SUPABASE_URL = "https://xkxkrldlbursvnvtrrtx.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhreGtybGRsYnVyc3ZudnRycnR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MDc4NTIsImV4cCI6MjA4NDk4Mzg1Mn0.5SRtjpv4FkEDnOnNorLAKLAJp_HWMt3u8OH1dtRP2cw"; // PASTE YOUR KEY HERE
+        // --- 1. CONFIGURATION ---
+        const PROJECT_URL = "https://xkxkrldlbursvnvtrrtx.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhreGtybGRsYnVyc3ZudnRycnR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MDc4NTIsImV4cCI6MjA4NDk4Mzg1Mn0.5SRtjpv4FkEDnOnNorLAKLAJp_HWMt3u8OH1dtRP2cw"; // <--- PASTE YOUR KEY HERE
         
-        // This is the ONLY time we declare 'supabase'
-        const supabaseClient = (SUPABASE_URL && SUPABASE_ANON_KEY) 
-            ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
+        // Use a unique name to avoid conflicts with other libraries
+        const portfolioDb = (PROJECT_URL && SUPABASE_ANON_KEY) 
+            ? supabase.createClient(PROJECT_URL, SUPABASE_ANON_KEY) 
             : null;
 
-        // --- 2. AUTOMATIC VISITOR TRACKING ---
+        // --- 2. TRACKING ---
         async function logVisit() {
-            if (!supabaseClient) return;
+            if (!portfolioDb) return;
             try {
-                await supabaseClient.from('site_visits').insert([{
+                await portfolioDb.from('site_visits').insert([{
                     user_agent: navigator.userAgent,
                     screen_resolution: `${window.screen.width}x${window.screen.height}`,
                     language: navigator.language
                 }]);
-                console.log("Visit logged.");
-            } catch (e) { console.error("Log failed", e); }
+                console.log("Analytics: Visit logged.");
+            } catch (e) { console.warn("Analytics blocked."); }
         }
-        window.addEventListener('load', logVisit);
 
-        // --- 3. CONTACT FORM HANDLER ---
+        // --- 3. FORM SUBMISSION ---
         async function sendMessage() {
-            const email = document.getElementById('user-email').value;
-            const message = document.getElementById('user-message').value;
+            const emailInput = document.getElementById('user-email');
+            const messageInput = document.getElementById('user-message');
             const btn = document.getElementById('send-btn');
             const status = document.getElementById('form-status');
 
-            if (!supabaseClient) {
-                status.innerHTML = "<span class='text-red-500'>⚠️ Database Key Missing</span>";
+            if (!portfolioDb) {
+                status.innerHTML = "<span class='text-red-500'>Error: Supabase Key Missing.</span>";
                 return;
             }
-            if (!email || !message) {
-                status.innerHTML = "<span class='text-amber-600'>Please fill all fields.</span>";
+            if (!emailInput.value || !messageInput.value) {
+                status.innerHTML = "<span class='text-amber-600'>Please provide both email and message.</span>";
                 return;
             }
 
             btn.disabled = true;
             btn.innerText = "Processing...";
+            status.innerHTML = "";
 
-            const { error } = await supabaseClient
-                .from('contact_messages')
-                .insert([{ email, message }]);
+            try {
+                const { error } = await portfolioDb
+                    .from('contact_messages')
+                    .insert([{ email: emailInput.value, message: messageInput.value }]);
 
-            if (error) {
-                status.innerHTML = `<span class='text-red-500'>Error: ${error.message}</span>`;
-            } else {
-                status.innerHTML = "<span class='text-green-600'>✅ Message saved successfully!</span>";
-                document.getElementById('user-email').value = "";
-                document.getElementById('user-message').value = "";
+                if (error) throw error;
+
+                status.innerHTML = "<span class='text-green-600'>✅ Success! Your message is in Supabase.</span>";
+                emailInput.value = "";
+                messageInput.value = "";
+            } catch (err) {
+                status.innerHTML = `<span class='text-red-500'>Error: ${err.message}</span>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Save to Supabase";
             }
-            btn.disabled = false;
-            btn.innerText = "Send Message";
         }
 
-        // --- 4. UTILITY FUNCTIONS ---
+        // --- 4. NAVIGATION & UI ---
         function scrollToSection(id) {
             const el = document.getElementById(id);
             if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
@@ -175,24 +184,24 @@
         function switchTab(tab) {
             document.getElementById('content-dsa').classList.toggle('hidden', tab !== 'dsa');
             document.getElementById('content-db').classList.toggle('hidden', tab !== 'db');
-            document.getElementById('tab-dsa').className = tab === 'dsa' ? 'tab-active flex-1 py-6 text-sm uppercase tracking-widest' : 'tab-inactive flex-1 py-6 text-sm uppercase tracking-widest';
-            document.getElementById('tab-db').className = tab === 'db' ? 'tab-active flex-1 py-6 text-sm uppercase tracking-widest' : 'tab-inactive flex-1 py-6 text-sm uppercase tracking-widest';
+            document.getElementById('tab-dsa').className = tab === 'dsa' ? 'tab-active flex-1 py-6 text-xs uppercase tracking-widest' : 'tab-inactive flex-1 py-6 text-xs uppercase tracking-widest';
+            document.getElementById('tab-db').className = tab === 'db' ? 'tab-active flex-1 py-6 text-xs uppercase tracking-widest' : 'tab-inactive flex-1 py-6 text-xs uppercase tracking-widest';
             
-            if(tab === 'db' && supabaseClient) {
+            if(tab === 'db' && portfolioDb) {
                 const log = document.getElementById('db-log');
-                log.innerHTML += `<span class="text-stone-500">[${new Date().toLocaleTimeString()}]</span> > Handshake successful.<br>`;
-                log.innerHTML += `<span class="text-stone-500">[${new Date().toLocaleTimeString()}]</span> > Connection: Live.<br>`;
+                log.innerHTML += `<span class="text-stone-500">[${new Date().toLocaleTimeString()}]</span> > Connection established with Supabase.<br>`;
+                log.innerHTML += `<span class="text-stone-500">[${new Date().toLocaleTimeString()}]</span> > RLS Status: Verified.<br>`;
             }
         }
 
-        // --- 5. VISUALIZER ENGINE ---
+        // --- 5. DSA ENGINE ---
         const ctx = document.getElementById('sortCanvas').getContext('2d');
         let rawData = [45, 12, 88, 62, 18, 35, 76, 51, 95];
         const chart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: rawData.map(() => ''),
-                datasets: [{ data: rawData, backgroundColor: '#1C1917', borderRadius: 8 }]
+                datasets: [{ data: rawData, backgroundColor: '#1C1917', borderRadius: 6 }]
             },
             options: { 
                 responsive: true, 
@@ -210,11 +219,14 @@
                         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
                         chart.data.datasets[0].data = [...arr];
                         chart.update('none');
-                        await new Promise(r => setTimeout(r, 120));
+                        await new Promise(r => setTimeout(r, 100));
                     }
                 }
             }
         }
+
+        // Initialize on Load
+        window.addEventListener('load', logVisit);
     </script>
 </body>
 </html>
