@@ -101,6 +101,30 @@
             ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
             : null;
 
+        // --- VISITOR TRACKING LOGIC ---
+async function logVisitor() {
+    if (!supabase) return;
+
+    const visitData = {
+        user_agent: navigator.userAgent,
+        screen_resolution: `${window.screen.width}x${window.screen.height}`,
+        language: navigator.language
+    };
+
+    const { error } = await supabase
+        .from('site_visits')
+        .insert([visitData]);
+
+    if (error) {
+        console.error("Tracking Error:", error);
+    } else {
+        console.log("Visit logged successfully.");
+    }
+}
+
+// Run this as soon as the page finishes loading
+window.addEventListener('load', logVisitor);
+
         async function sendMessage() {
             const email = document.getElementById('user-email').value;
             const message = document.getElementById('user-message').value;
@@ -182,4 +206,5 @@
     </script>
 </body>
 </html>
+
 
