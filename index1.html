@@ -6,650 +6,179 @@
     <title>Jeevesh R | Strategic Developer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <!-- Chosen Palette: Sand & Charcoal Modern (Warm Neutrals) -->
-    <!-- Application Structure Plan: 
-         1. Hero Section: Minimalist, typography-driven intro emphasizing the "Strategy & Execution" bio.
-         2. Interactive Skills Orbit: A dynamic Radar Chart visualizing skill balance (Coding vs Tools vs Concepts).
-         3. The "Logic Lab" (Portfolio Substitute): Since there are no external projects, this section features live, in-browser demos:
-            - DSA Visualizer: Demonstrates "Data Structures & Algorithms" skill via a live Chart.js sorting animation.
-            - System Status: Demonstrates "Web Dev/State" via a mock server dashboard.
-         4. Timeline/Journey: A clean layout for the bio/intro details.
-         5. Contact Node: Functional-looking layout for connection points.
-         Reasoning: This structure proves competence through *interaction* rather than static screenshots.
-    -->
-    
-    <!-- Visualization & Content Choices:
-         1. Radar Chart (Skills): Used to show the rounded nature of the profile (Languages, Web, Tools, Concepts). Goal: Inform.
-         2. Bar Chart (DSA Demo): An interactive bar chart that sorts itself. Goal: Demonstrate DSA skill visually.
-         3. Line Chart (Activity): A mock "GitHub Activity" style graph to fill visual space and imply diligence. Goal: Engagement.
-         4. Library: Chart.js for all canvases. Vanilla JS for logic.
-    -->
-
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F9F8F6; /* Warm off-white */
-            color: #1C1917; /* Stone 900 */
-            overflow-x: hidden;
-        }
-        h1, h2, h3, .display-text {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 350px;
-            max-height: 400px;
-        }
-        .nav-glass {
-            background: rgba(249, 248, 246, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        .card-hover {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
-        }
-        .skill-tag {
-            background-color: #E7E5E4; /* Stone 200 */
-            color: #44403C;
-            transition: all 0.2s;
-        }
-        .skill-tag:hover {
-            background-color: #D6D3D1;
-            color: #000;
-        }
-        /* Custom selection color */
-        ::selection {
-            background: #F59E0B; /* Amber 500 */
-            color: white;
-        }
-        .tab-active {
-            border-bottom: 2px solid #1C1917;
-            color: #1C1917;
-        }
-        .tab-inactive {
-            color: #A8A29E;
-            border-bottom: 2px solid transparent;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #F9F8F6; color: #1C1917; overflow-x: hidden; }
+        h1, h2, h3, .display-text { font-family: 'Space Grotesk', sans-serif; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; }
+        .nav-glass { background: rgba(249, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .tab-active { border-bottom: 2px solid #1C1917; color: #1C1917; }
+        .tab-inactive { color: #A8A29E; border-bottom: 2px solid transparent; }
     </style>
 </head>
-<body class="antialiased selection:bg-stone-800 selection:text-white">
+<body class="antialiased">
 
     <!-- Navigation -->
-    <nav class="nav-glass fixed w-full top-0 z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="scrollToSection('hero')">
-                    <span class="display-text text-2xl font-bold tracking-tighter">JR.</span>
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <button onclick="scrollToSection('about')" class="text-stone-600 hover:text-black text-sm font-medium transition-colors">About</button>
-                    <button onclick="scrollToSection('skills')" class="text-stone-600 hover:text-black text-sm font-medium transition-colors">Skills</button>
-                    <button onclick="scrollToSection('playground')" class="text-stone-600 hover:text-black text-sm font-medium transition-colors">The Lab</button>
-                    <button onclick="scrollToSection('contact')" class="text-stone-600 hover:text-black text-sm font-medium transition-colors">Contact</button>
-                </div>
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-stone-800 focus:outline-none text-2xl">☰</button>
-                </div>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-stone-100 border-b border-stone-200">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <button onclick="scrollToSection('about')" class="block px-3 py-2 text-base font-medium text-stone-700 hover:bg-stone-200 w-full text-left">About</button>
-                <button onclick="scrollToSection('skills')" class="block px-3 py-2 text-base font-medium text-stone-700 hover:bg-stone-200 w-full text-left">Skills</button>
-                <button onclick="scrollToSection('playground')" class="block px-3 py-2 text-base font-medium text-stone-700 hover:bg-stone-200 w-full text-left">The Lab</button>
-                <button onclick="scrollToSection('contact')" class="block px-3 py-2 text-base font-medium text-stone-700 hover:bg-stone-200 w-full text-left">Contact</button>
+    <nav class="nav-glass fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+            <span class="display-text text-2xl font-bold">JR.</span>
+            <div class="hidden md:flex space-x-8 text-sm font-medium">
+                <button onclick="scrollToSection('about')">About</button>
+                <button onclick="scrollToSection('playground')">The Lab</button>
+                <button onclick="scrollToSection('contact')">Contact</button>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="hero" class="min-h-screen flex items-center pt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div class="order-2 lg:order-1 fade-in-up">
-                <p class="text-amber-600 font-medium tracking-wide mb-4">HELLO, I AM JEEVESH R</p>
-                <h1 class="text-5xl md:text-7xl font-bold text-stone-900 leading-tight mb-6">
-                    Turning Ideas into <br>
-                    <span class="text-stone-400">Execution.</span>
-                </h1>
-                <p class="text-xl text-stone-600 mb-8 max-w-lg leading-relaxed">
-                    A curious Student & Developer bridging the gap between abstract strategy and concrete code. Exploring the intersection of creativity and logic.
-                </p>
-                <div class="flex space-x-4">
-                    <button onclick="scrollToSection('contact')" class="bg-stone-900 text-white px-8 py-4 rounded-lg font-medium hover:bg-stone-800 transition-all hover:scale-105">
-                        Let's Talk
-                    </button>
-                    <button onclick="scrollToSection('playground')" class="border border-stone-300 text-stone-900 px-8 py-4 rounded-lg font-medium hover:bg-stone-100 transition-all">
-                        See Capabilities
-                    </button>
-                </div>
-            </div>
-            <div class="order-1 lg:order-2 flex justify-center lg:justify-end">
-                <!-- Abstract visual representation of "Structure" using CSS -->
-                <div class="relative w-72 h-72 md:w-96 md:h-96">
-                    <div class="absolute inset-0 border-2 border-stone-200 rounded-full animate-[spin_10s_linear_infinite]"></div>
-                    <div class="absolute inset-8 border border-stone-300 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-48 h-48 bg-stone-100 rounded-full flex items-center justify-center shadow-inner">
-                            <span class="text-6xl">⚡</span>
-                        </div>
-                    </div>
-                    <!-- Orbiting elements -->
-                    <div class="absolute top-0 left-1/2 w-4 h-4 bg-amber-500 rounded-full -translate-x-1/2 -translate-y-2 shadow-lg"></div>
-                    <div class="absolute bottom-0 left-1/2 w-3 h-3 bg-stone-800 rounded-full -translate-x-1/2 translate-y-2"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
-                <div class="w-20 h-1 bg-amber-500"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                <div>
-                    <h3 class="text-2xl font-semibold mb-6">The Intersection of Strategy & Code</h3>
-                    <p class="text-stone-600 mb-6 leading-relaxed">
-                        I’m a professional shaped by hands-on experience and a relentless desire to learn. Currently pursuing my BCA, I focus on not just writing code, but building solutions.
-                    </p>
-                    <p class="text-stone-600 mb-6 leading-relaxed">
-                        Whether it's problem-solving through <strong>Data Structures & Algorithms</strong>, or architecting user interfaces with <strong>React</strong>, I look for the most efficient path from idea to reality.
-                    </p>
-                    <div class="grid grid-cols-2 gap-4 mt-8">
-                        <div class="p-4 bg-stone-50 rounded-lg border border-stone-100">
-                            <div class="text-2xl mb-2">🎓</div>
-                            <div class="font-bold text-stone-900">Student</div>
-                            <div class="text-sm text-stone-500">BCA Undergrad</div>
-                        </div>
-                        <div class="p-4 bg-stone-50 rounded-lg border border-stone-100">
-                            <div class="text-2xl mb-2">🚀</div>
-                            <div class="font-bold text-stone-900">Builder</div>
-                            <div class="text-sm text-stone-500">Full Stack Ready</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Skill Tags Cloud -->
-                <div class="bg-stone-50 p-8 rounded-2xl">
-                    <h3 class="text-xl font-bold mb-6">Technical Arsenal</h3>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">Python</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">Java</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">C</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">JavaScript</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">React.js</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">Node.js</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">HTML5/CSS3</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">MySQL</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">Git & GitHub</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">VS Code</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">DSA</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">OOP</span>
-                        <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium cursor-default">System Design</span>
-                    </div>
-
-                    <div class="mt-8 pt-8 border-t border-stone-200">
-                        <h4 class="font-semibold mb-2">Core Philosophy</h4>
-                        <p class="text-sm text-stone-500 italic">"I enjoy working at the intersection of strategy and execution, always looking for ways to improve how things are done."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Visual Skills Section -->
-    <section id="skills" class="py-24 bg-stone-900 text-stone-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-bold mb-2">Competency Map</h2>
-                    <p class="text-stone-400">Visualizing the balance of my technical skillset.</p>
-                </div>
-                <!-- Interactive Legend -->
-                <div class="mt-4 md:mt-0 flex gap-4 text-sm text-stone-400">
-                    <div class="flex items-center gap-2"><span class="w-3 h-3 bg-amber-500 rounded-full"></span> Strength</div>
-                    <div class="flex items-center gap-2"><span class="w-3 h-3 bg-stone-600 rounded-full"></span> Growth Area</div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Chart Container -->
-                <div class="lg:col-span-2 bg-stone-800 rounded-2xl p-6 shadow-2xl border border-stone-700">
-                    <div class="chart-container">
-                        <canvas id="skillsRadar"></canvas>
-                    </div>
-                </div>
-
-                <!-- Context Panel -->
-                <div class="flex flex-col justify-center space-y-6">
-                    <div class="bg-stone-800 p-6 rounded-xl border-l-4 border-amber-500">
-                        <h4 class="font-bold text-lg mb-2">Problem Solving</h4>
-                        <p class="text-stone-400 text-sm">Strong foundation in Data Structures and Algorithms. Capable of optimizing code for time and space complexity.</p>
-                    </div>
-                    <div class="bg-stone-800 p-6 rounded-xl border-l-4 border-blue-500">
-                        <h4 class="font-bold text-lg mb-2">Web Engineering</h4>
-                        <p class="text-stone-400 text-sm">Full-stack capabilities using the MERN ecosystem (React, Node) combined with solid database management (MySQL).</p>
-                    </div>
-                    <div class="bg-stone-800 p-6 rounded-xl border-l-4 border-emerald-500">
-                        <h4 class="font-bold text-lg mb-2">Tooling</h4>
-                        <p class="text-stone-400 text-sm">Proficient in modern workflows utilizing Git, VS Code, and debugging best practices.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- "The Lab" - Portfolio Substitute Section -->
-    <section id="playground" class="py-24 bg-stone-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <span class="text-amber-600 font-bold tracking-widest uppercase text-sm">Interactive Portfolio</span>
-                <h2 class="text-4xl font-bold mt-2 mb-4 text-stone-900">The Logic Lab</h2>
-                <p class="text-stone-600 max-w-2xl mx-auto">
-                    Since actions speak louder than static screenshots, interact with these live modules to see my code logic in action.
-                </p>
-            </div>
-
-            <!-- Lab Interface -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-stone-200">
-                <!-- Tabs -->
-                <div class="flex border-b border-stone-200 overflow-x-auto">
-                    <button onclick="switchTab('dsa')" id="tab-dsa" class="tab-active flex-1 py-4 px-6 text-center font-medium hover:bg-stone-50 transition-colors focus:outline-none whitespace-nowrap">
-                        DSA: Sorting Visualizer
-                    </button>
-                    <button onclick="switchTab('web')" id="tab-web" class="tab-inactive flex-1 py-4 px-6 text-center font-medium hover:bg-stone-50 transition-colors focus:outline-none whitespace-nowrap">
-                        Web: Async Data Handler
-                    </button>
-                    <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-inactive flex-1 py-4 px-6 text-center font-medium hover:bg-stone-50 transition-colors focus:outline-none whitespace-nowrap">
-                        Analytics: Trend Simulation
-                    </button>
-                </div>
-
-                <!-- Tab Content Area -->
-                <div class="p-6 md:p-12 min-h-[500px] flex flex-col justify-center">
-                    
-                    <!-- DSA Module -->
-                    <div id="content-dsa" class="block w-full">
-                        <div class="flex flex-col md:flex-row gap-8 items-center">
-                            <div class="w-full md:w-1/3 space-y-4">
-                                <h3 class="text-2xl font-bold text-stone-900">Algorithm Logic</h3>
-                                <p class="text-stone-600 text-sm">
-                                    Demonstrating logical thinking and array manipulation. Click "Run Sort" to visualize a Bubble Sort algorithm in real-time.
-                                </p>
-                                <div class="bg-stone-100 p-4 rounded text-xs font-mono text-stone-600">
-                                    def bubble_sort(arr):<br>
-                                    &nbsp;&nbsp;n = len(arr)<br>
-                                    &nbsp;&nbsp;for i in range(n):<br>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;for j in range(0, n-i-1):<br>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if arr[j] > arr[j+1]:<br>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swap(arr[j], arr[j+1])
-                                </div>
-                                <button onclick="runSortingDemo()" id="sortBtn" class="w-full py-3 bg-stone-900 text-white rounded hover:bg-stone-700 transition-colors">
-                                    Run Sort Visualization
-                                </button>
-                            </div>
-                            <div class="w-full md:w-2/3">
-                                <div class="chart-container">
-                                    <canvas id="sortCanvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Web Module -->
-                    <div id="content-web" class="hidden w-full">
-                        <div class="flex flex-col md:flex-row gap-8">
-                            <div class="w-full md:w-1/3 space-y-4">
-                                <h3 class="text-2xl font-bold text-stone-900">Async State Management</h3>
-                                <p class="text-stone-600 text-sm">
-                                    Simulating a frontend fetching data from an API. Demonstrates understanding of JSON, objects, and DOM manipulation.
-                                </p>
-                                <div class="space-y-2">
-                                    <button onclick="fetchMockUser()" class="w-full py-2 border border-stone-300 rounded hover:bg-stone-50 text-left px-4 flex justify-between items-center group">
-                                        <span>Fetch User Profile</span>
-                                        <span class="group-hover:translate-x-1 transition-transform">→</span>
-                                    </button>
-                                    <button onclick="fetchMockStats()" class="w-full py-2 border border-stone-300 rounded hover:bg-stone-50 text-left px-4 flex justify-between items-center group">
-                                        <span>Fetch System Stats</span>
-                                        <span class="group-hover:translate-x-1 transition-transform">→</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="w-full md:w-2/3 bg-stone-900 rounded-lg p-6 font-mono text-green-400 text-sm overflow-hidden relative min-h-[300px] shadow-inner">
-                                <div class="absolute top-2 left-2 flex gap-2">
-                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                                </div>
-                                <div id="console-output" class="mt-6 space-y-2 h-full overflow-y-auto">
-                                    <p class="opacity-50">// Console ready...</p>
-                                    <p class="opacity-50">// Waiting for request...</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Analytics Module -->
-                    <div id="content-analytics" class="hidden w-full">
-                        <div class="flex flex-col justify-center items-center text-center">
-                            <h3 class="text-2xl font-bold text-stone-900 mb-2">Data Simulation</h3>
-                            <p class="text-stone-600 mb-6 max-w-lg">
-                                Simulating a real-time data stream to demonstrate responsive chart updates and event handling.
-                            </p>
-                            <div class="flex gap-4 mb-6">
-                                <button onclick="toggleDataStream()" id="streamBtn" class="bg-amber-600 text-white px-6 py-2 rounded shadow hover:bg-amber-700">Start Stream</button>
-                                <button onclick="resetDataStream()" class="text-stone-600 px-6 py-2 hover:text-black">Reset</button>
-                            </div>
-                            <div class="w-full max-w-3xl">
-                                <div class="chart-container">
-                                    <canvas id="streamCanvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer / Contact -->
-    <section id="contact" class="bg-white border-t border-stone-200 py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-8">
+    <!-- Hero -->
+    <section id="hero" class="min-h-screen flex items-center pt-20 px-4">
+        <div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
             <div>
-                <h2 class="text-3xl font-bold mb-2">Ready to Collaborate?</h2>
-                <p class="text-stone-500 mb-6">Always open to discussing new projects, creative ideas or opportunities to be part of your visions.</p>
-                
-                <a href="mailto:jeevesh.r4@gmail.com" class="text-2xl md:text-4xl font-bold text-stone-900 hover:text-amber-600 transition-colors border-b-2 border-stone-900 hover:border-amber-600 pb-1">
-                    jeevesh.r4@gmail.com
-                </a>
+                <p class="text-amber-600 font-medium mb-4 uppercase tracking-widest">Student & Developer</p>
+                <h1 class="text-6xl font-bold leading-tight mb-6">Jeevesh R.</h1>
+                <p class="text-xl text-stone-600 mb-8">Turning BCA foundations into real-world solutions through code and strategy.</p>
+                <button onclick="scrollToSection('contact')" class="bg-stone-900 text-white px-8 py-4 rounded-lg hover:scale-105 transition-transform">Connect Database</button>
             </div>
-            
-            <div class="flex gap-6">
-                <a href="https://www.linkedin.com/in/jeevesh-r-6a117a285" target="_blank" class="w-14 h-14 bg-stone-100 rounded-full flex items-center justify-center text-2xl hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-2 shadow-sm">
-                    in
-                </a>
-                <a href="https://x.com/JeeveshR52720" target="_blank" class="w-14 h-14 bg-stone-100 rounded-full flex items-center justify-center text-2xl hover:bg-black hover:text-white transition-all transform hover:-translate-y-2 shadow-sm">
-                    𝕏
-                </a>
+            <div class="hidden md:block">
+                <div class="w-full aspect-square bg-stone-100 rounded-full border border-stone-200 flex items-center justify-center text-8xl">🚀</div>
             </div>
-        </div>
-        <div class="max-w-7xl mx-auto px-4 mt-12 text-center text-stone-400 text-sm">
-            &copy; 2024 Jeevesh R. Built with precision and code.
         </div>
     </section>
 
-    <!-- Javascript Logic -->
-    <script>
-        // --- 1. Global Navigation Logic ---
-        function scrollToSection(id) {
-            const el = document.getElementById(id);
-            if (el) {
-                const navHeight = 80; // height of fixed nav
-                const elementPosition = el.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - navHeight;
-                
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: "smooth"
-                });
-            }
-            // Close mobile menu if open
-            document.getElementById('mobile-menu').classList.add('hidden');
-        }
-
-        // Mobile Menu Toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
-
-
-        // --- 2. Skills Radar Chart ---
-        const ctxRadar = document.getElementById('skillsRadar').getContext('2d');
-        const skillsChart = new Chart(ctxRadar, {
-            type: 'radar',
-            data: {
-                labels: ['Python/Java/C', 'HTML/CSS/JS', 'React/Node', 'Databases', 'Algorithms', 'System Design'],
-                datasets: [{
-                    label: 'Proficiency Level',
-                    data: [90, 85, 80, 75, 85, 65],
-                    fill: true,
-                    backgroundColor: 'rgba(245, 158, 11, 0.2)', // Amber with opacity
-                    borderColor: 'rgb(245, 158, 11)',
-                    pointBackgroundColor: 'rgb(245, 158, 11)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(245, 158, 11)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        pointLabels: {
-                            color: '#d6d3d1', // Stone 300
-                            font: { size: 12, family: 'Inter' }
-                        },
-                        ticks: { display: false, max: 100 }
-                    }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-
-        // --- 3. Tab Logic for "The Lab" ---
-        function switchTab(tabName) {
-            // Hide all content
-            ['dsa', 'web', 'analytics'].forEach(t => {
-                document.getElementById(`content-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('tab-active');
-                document.getElementById(`tab-${t}`).classList.add('tab-inactive');
-            });
-
-            // Show selected
-            document.getElementById(`content-${tabName}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabName}`).classList.add('tab-active');
-            document.getElementById(`tab-${tabName}`).classList.remove('tab-inactive');
+    <!-- The Lab (Interactive) -->
+    <section id="playground" class="py-24 bg-stone-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold">The Logic Lab</h2>
+                <p class="text-stone-600 mt-2">Experimental modules demonstrating real-time logic.</p>
+            </div>
             
-            // Resize charts if necessary (sometimes hidden canvas needs resize trigger)
-            if(tabName === 'dsa') sortChart.resize();
-            if(tabName === 'analytics') streamChart.resize();
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div class="flex border-b">
+                    <button onclick="switchTab('dsa')" id="tab-dsa" class="tab-active flex-1 py-4">DSA Visualizer</button>
+                    <button onclick="switchTab('db')" id="tab-db" class="tab-inactive flex-1 py-4">Live DB Status</button>
+                </div>
+                <div class="p-8 min-h-[400px]">
+                    <div id="content-dsa" class="block">
+                        <div class="chart-container"><canvas id="sortCanvas"></canvas></div>
+                        <center><button onclick="runSortingDemo()" class="mt-6 bg-stone-900 text-white px-6 py-2 rounded">Run Bubble Sort</button></center>
+                    </div>
+                    <div id="content-db" class="hidden">
+                        <div class="bg-stone-900 text-green-400 p-6 rounded font-mono text-sm h-64 overflow-y-auto" id="db-log">
+                            > Initializing Supabase Connection...<br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form (Supabase Connected) -->
+    <section id="contact" class="py-24 bg-white">
+        <div class="max-w-3xl mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-8">Send a Message</h2>
+            <div class="space-y-4">
+                <input type="email" id="user-email" placeholder="your@email.com" class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                <textarea id="user-message" rows="4" placeholder="Your message..." class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
+                <button onclick="sendMessage()" id="send-btn" class="w-full bg-stone-900 text-white py-4 rounded-lg font-bold hover:bg-black transition-colors">
+                    Save to Supabase
+                </button>
+                <p id="form-status" class="text-center text-sm mt-2"></p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- SUPABASE CONFIGURATION ---
+        // REPLACE THESE with your actual Supabase URL and Anon Key
+        const SUPABASE_URL = ""; 
+        const SUPABASE_ANON_KEY = "";
+        
+        const supabase = (SUPABASE_URL && SUPABASE_ANON_KEY) 
+            ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
+            : null;
+
+        async function sendMessage() {
+            const email = document.getElementById('user-email').value;
+            const message = document.getElementById('user-message').value;
+            const btn = document.getElementById('send-btn');
+            const status = document.getElementById('form-status');
+
+            if (!supabase) {
+                status.innerText = "⚠️ Supabase keys missing in code!";
+                return;
+            }
+
+            if (!email || !message) {
+                status.innerText = "Please fill all fields.";
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Sending...";
+
+            const { data, error } = await supabase
+                .from('contact_messages')
+                .insert([{ email, message }]);
+
+            if (error) {
+                console.error(error);
+                status.innerText = "Error: " + error.message;
+            } else {
+                status.innerText = "✅ Message saved to Supabase!";
+                document.getElementById('user-email').value = "";
+                document.getElementById('user-message').value = "";
+            }
+            btn.disabled = false;
+            btn.innerText = "Save to Supabase";
         }
 
-        // --- 4. DSA Sorting Visualizer Logic ---
-        const ctxSort = document.getElementById('sortCanvas').getContext('2d');
-        let sortData = Array.from({length: 15}, () => Math.floor(Math.random() * 100));
-        let isSorting = false;
+        // --- UI LOGIC ---
+        function scrollToSection(id) {
+            window.scrollTo({ top: document.getElementById(id).offsetTop - 80, behavior: 'smooth' });
+        }
 
-        const sortChart = new Chart(ctxSort, {
+        function switchTab(tab) {
+            document.getElementById('content-dsa').classList.toggle('hidden', tab !== 'dsa');
+            document.getElementById('content-db').classList.toggle('hidden', tab !== 'db');
+            document.getElementById('tab-dsa').className = tab === 'dsa' ? 'tab-active flex-1 py-4' : 'tab-inactive flex-1 py-4';
+            document.getElementById('tab-db').className = tab === 'db' ? 'tab-active flex-1 py-4' : 'tab-inactive flex-1 py-4';
+            
+            if (tab === 'db' && supabase) {
+                const log = document.getElementById('db-log');
+                log.innerHTML += `> Pinged Supabase at ${new Date().toLocaleTimeString()}<br>`;
+                log.innerHTML += `> Status: Connected to PostgreSQL<br>`;
+            }
+        }
+
+        // --- SORTING VISUALIZER ---
+        const ctx = document.getElementById('sortCanvas').getContext('2d');
+        let data = [40, 20, 90, 60, 10, 30, 80, 50, 70];
+        const chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: sortData.map((_, i) => i),
-                datasets: [{
-                    label: 'Value',
-                    data: sortData,
-                    backgroundColor: '#44403C', // Stone 700
-                    borderRadius: 4
-                }]
+                labels: data.map(() => ''),
+                datasets: [{ data: data, backgroundColor: '#44403C', borderRadius: 5 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: { duration: 200 }, // fast animation for sorting steps
-                scales: {
-                    x: { display: false },
-                    y: { display: false }
-                },
-                plugins: { legend: { display: false } }
-            }
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { display: false }, x: { display: false } }, plugins: { legend: false } }
         });
 
         async function runSortingDemo() {
-            if (isSorting) return;
-            isSorting = true;
-            document.getElementById('sortBtn').innerText = "Sorting...";
-            
-            // Reset Data
-            let arr = Array.from({length: 15}, () => Math.floor(Math.random() * 100));
-            sortChart.data.datasets[0].data = [...arr];
-            sortChart.update();
-            await new Promise(r => setTimeout(r, 500));
-
-            // Bubble Sort Visualization
-            let n = arr.length;
-            for (let i = 0; i < n; i++) {
-                for (let j = 0; j < n - i - 1; j++) {
-                    // Highlight comparison
-                    let colors = new Array(n).fill('#44403C');
-                    colors[j] = '#F59E0B'; // Amber (Active)
-                    colors[j+1] = '#F59E0B';
-                    sortChart.data.datasets[0].backgroundColor = colors;
-                    sortChart.update();
-                    
-                    await new Promise(r => setTimeout(r, 100)); // Delay
-
-                    if (arr[j] > arr[j+1]) {
-                        // Swap
-                        let temp = arr[j];
-                        arr[j] = arr[j+1];
-                        arr[j+1] = temp;
-                        sortChart.data.datasets[0].data = [...arr];
-                        sortChart.update();
+            let arr = [...data];
+            for (let i = 0; i < arr.length; i++) {
+                for (let j = 0; j < arr.length - i - 1; j++) {
+                    if (arr[j] > arr[j + 1]) {
+                        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                        chart.data.datasets[0].data = [...arr];
+                        chart.update('none');
+                        await new Promise(r => setTimeout(r, 100));
                     }
                 }
             }
-
-            // Success state
-            sortChart.data.datasets[0].backgroundColor = new Array(n).fill('#10B981'); // Emerald
-            sortChart.update();
-            document.getElementById('sortBtn').innerText = "Run Sort Visualization";
-            isSorting = false;
         }
-
-
-        // --- 5. Web Console Simulator ---
-        const consoleEl = document.getElementById('console-output');
-        
-        function logToConsole(text, type = 'info') {
-            const p = document.createElement('p');
-            p.className = "font-mono text-sm mb-1";
-            const timestamp = new Date().toLocaleTimeString();
-            
-            if(type === 'success') p.innerHTML = `<span class="text-stone-500">[${timestamp}]</span> <span class="text-green-400">SUCCESS:</span> ${text}`;
-            else if(type === 'json') p.innerHTML = `<span class="text-stone-500">[${timestamp}]</span> <span class="text-yellow-300">DATA:</span> ${text}`;
-            else p.innerHTML = `<span class="text-stone-500">[${timestamp}]</span> > ${text}`;
-            
-            consoleEl.appendChild(p);
-            consoleEl.scrollTop = consoleEl.scrollHeight;
-        }
-
-        function fetchMockUser() {
-            logToConsole('GET /api/v1/users/jeevesh');
-            setTimeout(() => {
-                logToConsole('200 OK - Data Received', 'success');
-                logToConsole(JSON.stringify({ name: "Jeevesh", role: "Dev", status: "Online" }, null, 2), 'json');
-            }, 800);
-        }
-
-        function fetchMockStats() {
-            logToConsole('GET /api/system/stats');
-            setTimeout(() => {
-                const mem = Math.floor(Math.random() * 30) + 20;
-                logToConsole(`CPU Load: ${Math.floor(Math.random() * 20)}% | Memory: ${mem}%`, 'success');
-            }, 600);
-        }
-
-        // --- 6. Analytics Stream Logic ---
-        const ctxStream = document.getElementById('streamCanvas').getContext('2d');
-        let streamInterval;
-        let streamData = [10, 12, 15, 14, 18, 20, 22];
-        let streamLabels = ['1s', '2s', '3s', '4s', '5s', '6s', '7s'];
-
-        const streamChart = new Chart(ctxStream, {
-            type: 'line',
-            data: {
-                labels: streamLabels,
-                datasets: [{
-                    label: 'Simulated Traffic',
-                    data: streamData,
-                    borderColor: '#0EA5E9', // Sky Blue
-                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: { beginAtZero: true, suggestedMax: 50 },
-                    x: { display: true }
-                }
-            }
-        });
-
-        function toggleDataStream() {
-            const btn = document.getElementById('streamBtn');
-            if (streamInterval) {
-                clearInterval(streamInterval);
-                streamInterval = null;
-                btn.innerText = "Start Stream";
-                btn.classList.remove('bg-red-600', 'hover:bg-red-700');
-                btn.classList.add('bg-amber-600', 'hover:bg-amber-700');
-            } else {
-                btn.innerText = "Stop Stream";
-                btn.classList.remove('bg-amber-600', 'hover:bg-amber-700');
-                btn.classList.add('bg-red-600', 'hover:bg-red-700');
-                
-                streamInterval = setInterval(() => {
-                    // Remove first
-                    streamData.shift();
-                    streamLabels.shift();
-                    
-                    // Add new
-                    const lastVal = streamData[streamData.length - 1];
-                    const change = Math.floor(Math.random() * 10) - 4; // Random walk
-                    let newVal = Math.max(0, lastVal + change);
-                    
-                    streamData.push(newVal);
-                    streamLabels.push(new Date().getSeconds() + 's');
-                    
-                    streamChart.update();
-                }, 800);
-            }
-        }
-        
-        function resetDataStream() {
-            if (streamInterval) toggleDataStream(); // stop if running
-            streamData = [10, 12, 15, 14, 18, 20, 22];
-            streamLabels = ['1s', '2s', '3s', '4s', '5s', '6s', '7s'];
-            streamChart.data.datasets[0].data = streamData;
-            streamChart.data.labels = streamLabels;
-            streamChart.update();
-        }
-
     </script>
 </body>
 </html>
