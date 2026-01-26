@@ -4,30 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeevesh R | Strategic Developer</title>
-    <!-- Dependencies -->
+    <!-- Modern Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #F9F8F6; color: #1C1917; scroll-behavior: smooth; }
-        h1, h2, h3, .display-text { font-family: 'Space Grotesk', sans-serif; }
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
         .nav-glass { background: rgba(249, 248, 246, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 320px; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 350px; }
         .tab-active { border-bottom: 2px solid #1C1917; color: #1C1917; font-weight: 600; }
         .tab-inactive { color: #A8A29E; border-bottom: 2px solid transparent; }
-        .btn-primary { background-color: #1C1917; color: #fff; transition: all 0.3s ease; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .console-box { background: #0C0A09; color: #22C55E; font-family: 'Courier New', monospace; border-radius: 8px; padding: 20px; height: 200px; overflow-y: auto; font-size: 13px; }
+        .btn-black { background-color: #1C1917; color: #fff; transition: all 0.3s ease; }
+        .btn-black:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .console-box { background: #0C0A09; color: #22C55E; font-family: 'Courier New', monospace; border-radius: 12px; padding: 20px; height: 250px; overflow-y: auto; font-size: 14px; }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Navigation -->
+    <!-- Navbar -->
     <nav class="nav-glass fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <span class="display-text text-2xl font-bold tracking-tighter cursor-pointer" onclick="scrollToSection('hero')">JR.</span>
-            <div class="hidden md:flex space-x-10 text-sm font-medium uppercase tracking-widest">
+            <span class="text-2xl font-bold tracking-tighter cursor-pointer" onclick="scrollToSection('hero')">JR.</span>
+            <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest">
                 <button onclick="scrollToSection('hero')" class="hover:text-amber-600 transition-colors">Home</button>
                 <button onclick="scrollToSection('playground')" class="hover:text-amber-600 transition-colors">The Lab</button>
                 <button onclick="scrollToSection('contact')" class="hover:text-amber-600 transition-colors">Contact</button>
@@ -35,52 +35,57 @@
         </div>
     </nav>
 
-    <!-- Hero -->
+    <!-- Hero Section -->
     <section id="hero" class="min-h-screen flex items-center pt-20 px-6">
         <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
             <div>
-                <span class="text-amber-600 font-bold text-sm tracking-[0.3em] uppercase mb-4 block">Student & Developer</span>
-                <h1 class="text-6xl md:text-7xl font-bold leading-[1.1] mb-8 text-stone-900">Jeevesh R.</h1>
+                <span class="text-amber-600 font-bold text-xs tracking-[0.3em] uppercase mb-4 block">BCA Student & Developer</span>
+                <h1 class="text-6xl md:text-8xl font-bold leading-tight mb-8 text-stone-900">Jeevesh R.</h1>
                 <p class="text-xl text-stone-600 mb-10 leading-relaxed max-w-lg">
                     I focus on turning ideas into practical, well-thought-out solutions, working at the intersection of strategy and execution.
                 </p>
-                <div class="flex flex-wrap gap-5">
-                    <button onclick="scrollToSection('contact')" class="btn-primary px-10 py-5 rounded-xl font-bold">Connect Now</button>
-                    <button onclick="scrollToSection('playground')" class="border border-stone-300 px-10 py-5 rounded-xl font-bold hover:bg-stone-50 transition-all">Explore Lab</button>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="scrollToSection('contact')" class="btn-black px-10 py-5 rounded-xl font-bold">Get in Touch</button>
+                    <button onclick="scrollToSection('playground')" class="border border-stone-300 px-10 py-5 rounded-xl font-bold hover:bg-stone-50 transition-all">Explore Experiments</button>
                 </div>
             </div>
             <div class="hidden lg:flex justify-center relative">
-                <div class="w-80 h-80 bg-stone-100 rounded-full flex items-center justify-center text-[8rem] shadow-inner relative z-10">
+                <div class="w-96 h-96 bg-stone-100 rounded-full flex items-center justify-center text-[10rem] shadow-inner relative z-10">
                     ⚡
                 </div>
-                <div class="absolute inset-0 border-2 border-dashed border-stone-200 rounded-full animate-[spin_30s_linear_infinite]"></div>
+                <div class="absolute inset-0 border-2 border-dashed border-stone-200 rounded-full animate-[spin_40s_linear_infinite]"></div>
             </div>
         </div>
     </section>
 
-    <!-- Lab -->
+    <!-- Interactive Lab -->
     <section id="playground" class="py-32 bg-stone-100">
         <div class="max-w-7xl mx-auto px-6">
             <div class="mb-16">
                 <h2 class="text-4xl font-bold text-stone-900">The Logic Lab</h2>
-                <p class="text-stone-500 mt-4 max-w-xl">Interactive modules proving the logic behind the code.</p>
+                <p class="text-stone-500 mt-4">Direct proof of coding logic and system connectivity.</p>
             </div>
             
             <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-stone-200">
                 <div class="flex border-b border-stone-100">
-                    <button onclick="switchTab('dsa')" id="tab-dsa" class="tab-active flex-1 py-6 text-xs uppercase tracking-widest">DSA Visualizer</button>
-                    <button onclick="switchTab('db')" id="tab-db" class="tab-inactive flex-1 py-6 text-xs uppercase tracking-widest">Live DB Status</button>
+                    <button onclick="switchTab('dsa')" id="tab-dsa" class="tab-active flex-1 py-6 text-xs uppercase tracking-widest">Sorting Algorithm</button>
+                    <button onclick="switchTab('db')" id="tab-db" class="tab-inactive flex-1 py-6 text-xs uppercase tracking-widest">Database Heartbeat</button>
                 </div>
-                <div class="p-8 md:p-12 min-h-[450px] flex flex-col justify-center">
+                <div class="p-8 md:p-12 min-h-[480px] flex flex-col justify-center">
+                    <!-- DSA Module -->
                     <div id="content-dsa" class="block">
                         <div class="chart-container"><canvas id="sortCanvas"></canvas></div>
                         <div class="mt-10 text-center">
-                            <button onclick="runSortingDemo()" class="btn-primary px-8 py-3 rounded-lg text-sm">Execute Bubble Sort</button>
+                            <button onclick="runSortingDemo()" id="sort-btn" class="btn-black px-8 py-3 rounded-lg text-sm uppercase tracking-widest">Run Bubble Sort</button>
                         </div>
                     </div>
+                    <!-- Database Module -->
                     <div id="content-db" class="hidden">
                         <div class="console-box" id="db-log">
-                            <span class="text-stone-500">// System Check Initialized...</span><br>
+                            <span class="text-stone-500">// System ready for connection...</span><br>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <button onclick="pingDatabase()" class="text-stone-400 hover:text-black text-sm font-bold uppercase tracking-widest transition-colors">Ping Supabase</button>
                         </div>
                     </div>
                 </div>
@@ -88,94 +93,101 @@
         </div>
     </section>
 
-    <!-- Contact -->
+    <!-- Contact Form -->
     <section id="contact" class="py-32 bg-white">
-        <div class="max-w-3xl mx-auto px-6 text-center">
-            <h2 class="text-5xl font-bold mb-6 text-stone-900">Contact.</h2>
-            <p class="text-stone-500 mb-12">Submit your details to my secure Supabase instance.</p>
+        <div class="max-w-3xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-4 text-stone-900">Connect.</h2>
+                <p class="text-stone-500 text-lg">Send a message directly to my private database.</p>
+            </div>
             
-            <div class="space-y-6 text-left">
+            <div class="space-y-6">
                 <div>
-                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2 block">Email Address</label>
-                    <input type="email" id="user-email" placeholder="name@example.com" class="w-full p-5 bg-stone-50 border border-stone-100 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500/20 transition-all">
+                    <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-2 block">Email Address</label>
+                    <input type="email" id="user-email" placeholder="hello@example.com" class="w-full p-5 bg-stone-50 border border-stone-100 rounded-2xl outline-none focus:ring-4 focus:ring-amber-500/10 transition-all">
                 </div>
                 <div>
-                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2 block">Your Message</label>
-                    <textarea id="user-message" rows="5" placeholder="Let's build something together..." class="w-full p-5 bg-stone-50 border border-stone-100 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"></textarea>
+                    <label class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-2 block">Message</label>
+                    <textarea id="user-message" rows="5" placeholder="Let's build something practical..." class="w-full p-5 bg-stone-50 border border-stone-100 rounded-2xl outline-none focus:ring-4 focus:ring-amber-500/10 transition-all"></textarea>
                 </div>
-                <button onclick="sendMessage()" id="send-btn" class="w-full btn-primary py-6 rounded-2xl font-bold text-lg shadow-lg">Save to Supabase</button>
+                <button onclick="sendMessage()" id="send-btn" class="w-full btn-black py-6 rounded-2xl font-bold text-lg shadow-xl shadow-stone-200">
+                    Send to Supabase
+                </button>
                 <p id="form-status" class="text-center font-medium mt-6"></p>
             </div>
         </div>
     </section>
 
-    <footer class="py-12 border-t border-stone-100 text-center">
-        <p class="text-stone-400 text-xs uppercase tracking-widest">&copy; 2026 Jeevesh R. Strategy & Execution.</p>
+    <footer class="py-20 border-t border-stone-100 text-center bg-stone-50">
+        <p class="text-stone-400 text-xs font-bold uppercase tracking-[0.3em] mb-4">&copy; 2026 Jeevesh R.</p>
+        <div class="flex justify-center space-x-6 text-stone-400">
+            <a href="https://www.linkedin.com/in/jeevesh-r-6a117a285" target="_blank" class="hover:text-black transition-colors">LinkedIn</a>
+            <a href="https://x.com/JeeveshR52720" target="_blank" class="hover:text-black transition-colors">X / Twitter</a>
+        </div>
     </footer>
 
-    <!-- Logic Script -->
+    <!-- All Logic in ONE Block to prevent errors -->
     <script>
-        // --- 1. CONFIGURATION ---
-        const PROJECT_URL = "https://xkxkrldlbursvnvtrrtx.supabase.co"; 
+        // 1. Connection Details
+        const PROJECT_URL = "https://xkxkrldlbursvnvtrrtx.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhreGtybGRsYnVyc3ZudnRycnR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MDc4NTIsImV4cCI6MjA4NDk4Mzg1Mn0.5SRtjpv4FkEDnOnNorLAKLAJp_HWMt3u8OH1dtRP2cw"; // <--- PASTE YOUR KEY HERE
-        
-        // Use a unique name to avoid conflicts with other libraries
-        const portfolioDb = (PROJECT_URL && SUPABASE_ANON_KEY) 
+
+        // 2. Initialize with a UNIQUE variable name to avoid "already declared" errors
+        const jeeveshDb = (PROJECT_URL && SUPABASE_ANON_KEY) 
             ? supabase.createClient(PROJECT_URL, SUPABASE_ANON_KEY) 
             : null;
 
-        // --- 2. TRACKING ---
+        // 3. Visitor Tracking
         async function logVisit() {
-            if (!portfolioDb) return;
+            if (!jeeveshDb) return;
             try {
-                await portfolioDb.from('site_visits').insert([{
+                await jeeveshDb.from('site_visits').insert([{
                     user_agent: navigator.userAgent,
                     screen_resolution: `${window.screen.width}x${window.screen.height}`,
                     language: navigator.language
                 }]);
-                console.log("Analytics: Visit logged.");
-            } catch (e) { console.warn("Analytics blocked."); }
+                console.log("Visit logged successfully.");
+            } catch (err) { console.warn("Analytics blocked by browser."); }
         }
 
-        // --- 3. FORM SUBMISSION ---
+        // 4. Form Submission
         async function sendMessage() {
-            const emailInput = document.getElementById('user-email');
-            const messageInput = document.getElementById('user-message');
+            const emailField = document.getElementById('user-email');
+            const messageField = document.getElementById('user-message');
             const btn = document.getElementById('send-btn');
             const status = document.getElementById('form-status');
 
-            if (!portfolioDb) {
-                status.innerHTML = "<span class='text-red-500'>Error: Supabase Key Missing.</span>";
+            if (!jeeveshDb) {
+                status.innerHTML = "<span class='text-red-500'>⚠️ Database credentials missing.</span>";
                 return;
             }
-            if (!emailInput.value || !messageInput.value) {
-                status.innerHTML = "<span class='text-amber-600'>Please provide both email and message.</span>";
+            if (!emailField.value || !messageField.value) {
+                status.innerHTML = "<span class='text-amber-600'>Please fill out both fields.</span>";
                 return;
             }
 
             btn.disabled = true;
-            btn.innerText = "Processing...";
-            status.innerHTML = "";
+            btn.innerText = "Transmitting...";
 
             try {
-                const { error } = await portfolioDb
+                const { error } = await jeeveshDb
                     .from('contact_messages')
-                    .insert([{ email: emailInput.value, message: messageInput.value }]);
+                    .insert([{ email: emailField.value, message: messageField.value }]);
 
                 if (error) throw error;
 
-                status.innerHTML = "<span class='text-green-600'>✅ Success! Your message is in Supabase.</span>";
-                emailInput.value = "";
-                messageInput.value = "";
+                status.innerHTML = "<span class='text-green-600'>✅ Message delivered to Supabase!</span>";
+                emailField.value = "";
+                messageField.value = "";
             } catch (err) {
                 status.innerHTML = `<span class='text-red-500'>Error: ${err.message}</span>`;
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Save to Supabase";
+                btn.innerText = "Send to Supabase";
             }
         }
 
-        // --- 4. NAVIGATION & UI ---
+        // 5. Navigation & Tabs
         function scrollToSection(id) {
             const el = document.getElementById(id);
             if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
@@ -184,24 +196,31 @@
         function switchTab(tab) {
             document.getElementById('content-dsa').classList.toggle('hidden', tab !== 'dsa');
             document.getElementById('content-db').classList.toggle('hidden', tab !== 'db');
+            
             document.getElementById('tab-dsa').className = tab === 'dsa' ? 'tab-active flex-1 py-6 text-xs uppercase tracking-widest' : 'tab-inactive flex-1 py-6 text-xs uppercase tracking-widest';
             document.getElementById('tab-db').className = tab === 'db' ? 'tab-active flex-1 py-6 text-xs uppercase tracking-widest' : 'tab-inactive flex-1 py-6 text-xs uppercase tracking-widest';
-            
-            if(tab === 'db' && portfolioDb) {
-                const log = document.getElementById('db-log');
-                log.innerHTML += `<span class="text-stone-500">[${new Date().toLocaleTimeString()}]</span> > Connection established with Supabase.<br>`;
-                log.innerHTML += `<span class="text-stone-500">[${new Date().toLocaleTimeString()}]</span> > RLS Status: Verified.<br>`;
-            }
         }
 
-        // --- 5. DSA ENGINE ---
+        function pingDatabase() {
+            const log = document.getElementById('db-log');
+            const time = new Date().toLocaleTimeString();
+            if(!jeeveshDb) {
+                log.innerHTML += `<span class="text-red-400">[${time}] ERR: Key missing.</span><br>`;
+            } else {
+                log.innerHTML += `<span class="text-green-400">[${time}] Connection Ping: OK</span><br>`;
+                log.innerHTML += `<span class="text-stone-400">[${time}] Handshake verified via xkxkrldlbursvnvtrrtx</span><br>`;
+            }
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // 6. Visualizer Engine
         const ctx = document.getElementById('sortCanvas').getContext('2d');
-        let rawData = [45, 12, 88, 62, 18, 35, 76, 51, 95];
+        let initialData = [55, 18, 92, 45, 12, 68, 81, 33, 99];
         const chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: rawData.map(() => ''),
-                datasets: [{ data: rawData, backgroundColor: '#1C1917', borderRadius: 6 }]
+                labels: initialData.map(() => ''),
+                datasets: [{ data: initialData, backgroundColor: '#1C1917', borderRadius: 8 }]
             },
             options: { 
                 responsive: true, 
@@ -212,21 +231,24 @@
         });
 
         async function runSortingDemo() {
-            let arr = [...rawData];
+            const sortBtn = document.getElementById('sort-btn');
+            sortBtn.disabled = true;
+            let arr = [...initialData];
             for (let i = 0; i < arr.length; i++) {
                 for (let j = 0; j < arr.length - i - 1; j++) {
                     if (arr[j] > arr[j + 1]) {
                         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
                         chart.data.datasets[0].data = [...arr];
                         chart.update('none');
-                        await new Promise(r => setTimeout(r, 100));
+                        await new Promise(r => setTimeout(r, 120));
                     }
                 }
             }
+            sortBtn.disabled = false;
         }
 
-        // Initialize on Load
-        window.addEventListener('load', logVisit);
+        // Initialize App
+        window.onload = logVisit;
     </script>
 </body>
 </html>
