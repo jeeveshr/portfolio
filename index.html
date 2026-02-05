@@ -3,261 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeevesh R | The Void Portfolio</title>
-    <!-- Dependencies -->
+    <title>Jeevesh R | Vibe Coder</title>
+    <!-- Core Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg: #050505;
-            --border: #1a1a1a;
-            --accent: #f59e0b;
+            /* DEEP MIDNIGHT THEME */
+            --bg: #020617; /* Slate 950 */
+            --card-bg: #0f172a; /* Slate 900 */
+            --border: #1e293b; /* Slate 800 */
+            --text-main: #f8fafc; /* Slate 50 */
+            --text-muted: #94a3b8; /* Slate 400 */
+            --accent: #06b6d4; /* Cyan 500 */
+            --accent-glow: rgba(6, 182, 212, 0.5);
         }
-
-        * { cursor: none !important; } /* Hide default cursor for custom one */
 
         body {
             background-color: var(--bg);
-            color: white;
-            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
 
-        .mono { font-family: 'JetBrains Mono', monospace; }
+        h1, h2, h3, .heading-font { font-family: 'Space Grotesk', sans-serif; }
 
-        /* Custom Cursor */
-        #cursor-dot {
-            width: 8px; height: 8px; background: white;
+        /* NOISE TEXTURE */
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 50; mix-blend-mode: overlay;
+        }
+
+        /* Custom Cursor - Cyan */
+        * { cursor: none; }
+        #cursor {
+            width: 12px; height: 12px; background: var(--accent);
             position: fixed; pointer-events: none; z-index: 9999;
-            border-radius: 50%; transform: translate(-50%, -50%);
+            border-radius: 50%; box-shadow: 0 0 10px var(--accent);
+            transition: transform 0.1s ease;
+            mix-blend-mode: normal; /* Changed from difference for better visibility on blue */
         }
-        #cursor-outline {
-            width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3);
-            position: fixed; pointer-events: none; z-index: 9998;
-            border-radius: 50%; transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out;
-        }
-
-        /* Brutalist Grids */
-        .b-grid { border: 1px solid var(--border); }
-        .b-grid-t { border-top: 1px solid var(--border); }
-        .b-grid-r { border-right: 1px solid var(--border); }
-        .b-grid-b { border-bottom: 1px solid var(--border); }
-
-        /* Sliding Text Marquee */
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .marquee-container {
+        
+        /* Bento Card Styles */
+        .bento-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
             overflow: hidden;
-            white-space: nowrap;
-            background: white;
-            color: black;
-            padding: 10px 0;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bento-card:hover {
+            border-color: #334155;
+            box-shadow: 0 10px 40px -10px rgba(6, 182, 212, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Marquee */
+        .marquee-wrapper {
+            width: 100%; overflow: hidden; white-space: nowrap;
+            background: var(--accent); /* Cyan Background */
+            color: #020617; /* Dark Text */
         }
         .marquee-content {
             display: inline-block;
-            animation: marquee 20s linear infinite;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 14px;
+            animation: scroll 20s linear infinite;
+        }
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* Status Dot Pulse - Cyan */
+        .pulse-dot {
+            width: 8px; height: 8px; background-color: var(--accent);
+            border-radius: 50%; display: inline-block;
+            box-shadow: 0 0 0 0 var(--accent-glow);
+            animation: pulse-cyan 2s infinite;
+        }
+        @keyframes pulse-cyan {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 var(--accent-glow); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(6, 182, 212, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
         }
 
-        /* 3D Canvas Sizing */
-        #three-canvas {
-            width: 100%; height: 100%;
-            position: absolute; top: 0; left: 0;
-            z-index: 0;
+        /* Three.js Background */
+        #three-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.6;
         }
 
-        .hero-title {
-            font-size: clamp(3rem, 10vw, 8rem);
-            line-height: 0.9;
-        }
-
-        .hover-reveal:hover { background: white; color: black; }
+        .mono { font-family: 'Courier New', monospace; }
         
-        /* Terminal Styling */
-        .terminal {
-            background: #000;
-            border: 1px solid var(--border);
-            color: #555;
-            font-family: 'JetBrains Mono', monospace;
-            padding: 20px;
-            font-size: 12px;
-            height: 250px;
-            overflow-y: auto;
-        }
+        /* Selection Color */
+        ::selection { background: var(--accent); color: #000; }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Custom Cursor -->
-    <div id="cursor-dot"></div>
-    <div id="cursor-outline"></div>
+    <div id="cursor"></div>
+    <div id="three-container"><canvas id="three-canvas"></canvas></div>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 bg-[#050505]/80 backdrop-blur-lg b-grid-b h-20">
-        <div class="max-w-[1800px] mx-auto h-full flex justify-between items-center px-8">
-            <div class="font-bold text-2xl tracking-tighter uppercase">Jeevesh <span class="text-stone-700">R.</span></div>
-            <div class="hidden md:flex h-full">
-                <button onclick="scrollToSection('about')" class="px-10 b-grid-r hover-reveal h-full uppercase text-[10px] font-bold tracking-widest">Profile</button>
-                <button onclick="scrollToSection('playground')" class="px-10 b-grid-r hover-reveal h-full uppercase text-[10px] font-bold tracking-widest">Laboratory</button>
-                <button onclick="scrollToSection('contact')" class="px-10 hover-reveal h-full uppercase text-[10px] font-bold tracking-widest">Connect</button>
-            </div>
+    <!-- Floating Nav -->
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-40">
+        <div class="bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-full px-6 py-3 flex gap-8 shadow-2xl shadow-cyan-900/10">
+            <a href="#hero" class="text-xs font-medium text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">Home</a>
+            <a href="#work" class="text-xs font-medium text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">Lab</a>
+            <a href="#contact" class="text-xs font-medium text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">Contact</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="hero" class="min-h-screen flex flex-col pt-20">
-        <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 relative">
-            <!-- Information Layer -->
-            <div class="lg:col-span-7 flex flex-col justify-center p-8 md:p-20 b-grid-r z-10 bg-[#050505]/30">
-                <span class="mono text-amber-500 text-xs mb-6 tracking-widest">// ARCHITECTING_LOGIC</span>
-                <h1 class="hero-title font-bold uppercase tracking-tighter mb-10">
-                    STRATEGY<br><span class="text-stone-800">&</span>VOID
-                </h1>
-                <p class="text-stone-400 text-xl max-w-lg leading-relaxed mb-12">
-                    I focus on turning ideas into practical, well-thought-out solutions, working at the intersection of strategy and execution.
+    <main class="max-w-5xl mx-auto px-6 pt-32 pb-20 relative z-10">
+        
+        <!-- Hero Section -->
+        <section id="hero" class="mb-24">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-full px-3 py-1 flex items-center gap-2">
+                    <div class="pulse-dot"></div>
+                    <span class="text-[10px] uppercase tracking-wider text-cyan-400 font-medium">System Online</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-full px-3 py-1">
+                    <span class="text-[10px] uppercase tracking-wider text-slate-500 font-medium">Bangalore, IN</span>
+                </div>
+            </div>
+
+            <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8 text-slate-50">
+                VIBE<br>
+                <span class="text-slate-600">CODER.</span>
+            </h1>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <p class="text-lg text-slate-400 leading-relaxed max-w-md">
+                    I'm <strong class="text-cyan-400">Jeevesh R</strong>. I build digital experiences at the intersection of strategy and execution. Currently mastering the art of Vibe Coding with HTML, CSS, JS & SQL.
                 </p>
-                <div class="flex gap-6">
-                    <button onclick="scrollToSection('contact')" class="bg-white text-black px-12 py-5 font-bold uppercase text-[10px] tracking-[0.3em] hover:bg-amber-500 transition-all">Direct Ping</button>
-                </div>
-            </div>
-
-            <!-- 3D Spiral Layer -->
-            <div class="lg:col-span-5 relative bg-stone-950/20">
-                <div id="three-container" class="absolute inset-0">
-                    <canvas id="three-canvas"></canvas>
-                </div>
-                <div class="absolute bottom-10 right-10 mono text-[10px] text-stone-600 text-right">
-                    OBJECT: SPIRAL_WIREFRAME_01<br>
-                    RENDER: WEBGL_2.0<br>
-                    STATUS: ACTIVE
-                </div>
-            </div>
-        </div>
-
-        <!-- Sliding Text Marquee -->
-        <div class="marquee-container b-grid-t b-grid-b">
-            <div class="marquee-content">
-                STRATEGY & EXECUTION — PROBLEM SOLVING — PYTHON — JAVA — REACT — NODE.JS — DATA STRUCTURES — ALGORITHMS — SYSTEM DESIGN — FULL STACK DEVELOPMENT — 
-                STRATEGY & EXECUTION — PROBLEM SOLVING — PYTHON — JAVA — REACT — NODE.JS — DATA STRUCTURES — ALGORITHMS — SYSTEM DESIGN — FULL STACK DEVELOPMENT — 
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="grid grid-cols-1 lg:grid-cols-2 b-grid-b">
-        <div class="p-10 md:p-20 b-grid-r bg-stone-950">
-            <h2 class="text-4xl font-bold uppercase mb-10 tracking-tighter">Bio_Manifesto</h2>
-            <p class="text-stone-400 text-lg leading-relaxed mb-8">
-                I’m a curious and driven professional with a background shaped by hands-on experience and a constant desire to learn. I focus on turning ideas into practical solutions, whether that’s through creative work, problem-solving, or building things from the ground up.
-            </p>
-            <div class="grid grid-cols-2 gap-px bg-stone-900 b-grid mt-12">
-                <div class="bg-stone-950 p-8">
-                    <div class="text-[10px] mono text-stone-600 uppercase mb-3">Programming</div>
-                    <div class="font-bold text-sm">Python / Java / C++</div>
-                </div>
-                <div class="bg-stone-950 p-8">
-                    <div class="text-[10px] mono text-stone-600 uppercase mb-3">Frontend</div>
-                    <div class="font-bold text-sm">React / Tailwind</div>
-                </div>
-            </div>
-        </div>
-        <div class="p-10 md:p-20 flex items-center">
-            <div class="space-y-12">
-                <div>
-                    <h3 class="text-xs uppercase mono text-stone-600 mb-6 tracking-[0.5em]">Current Project</h3>
-                    <p class="text-3xl font-bold leading-tight uppercase">Pursuing BCA while architecting full-stack interfaces that prioritize speed and clarity.</p>
-                </div>
-                <div class="flex gap-10 pt-10 border-t border-stone-900">
-                    <a href="https://www.linkedin.com/in/jeevesh-r-6a117a285" target="_blank" class="text-stone-500 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest underline underline-offset-8">LinkedIn</a>
-                    <a href="https://x.com/JeeveshR52720" target="_blank" class="text-stone-500 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest underline underline-offset-8">Twitter</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- The Laboratory -->
-    <section id="playground" class="bg-black">
-        <div class="grid grid-cols-1 lg:grid-cols-12 b-grid-b">
-            <div class="lg:col-span-4 p-10 b-grid-r flex flex-col justify-between">
-                <div>
-                    <h2 class="text-4xl font-bold uppercase mb-4 tracking-tighter">The Laboratory</h2>
-                    <p class="text-stone-600 text-sm mono">Experimental modules demonstrating system logic.</p>
-                </div>
-                <div class="space-y-2 mt-10">
-                    <button onclick="switchTab('dsa')" id="tab-dsa" class="w-full text-left p-6 b-grid bg-white text-black font-bold uppercase text-[10px] tracking-widest transition-all">01 // Sort_Visualizer</button>
-                    <button onclick="switchTab('db')" id="tab-db" class="w-full text-left p-6 b-grid text-stone-500 font-bold uppercase text-[10px] tracking-widest transition-all">02 // DB_Heartbeat</button>
-                </div>
-            </div>
-            <div class="lg:col-span-8 p-10 md:p-20 min-h-[500px] flex items-center justify-center relative">
-                <div id="content-dsa" class="w-full">
-                    <div class="chart-container"><canvas id="sortCanvas"></canvas></div>
-                    <div class="mt-12 flex justify-center">
-                        <button onclick="runSortingDemo()" class="px-10 py-4 b-grid text-xs font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">Execute Algorithm</button>
-                    </div>
-                </div>
-                <div id="content-db" class="hidden w-full">
-                    <div class="terminal" id="db-log">
-                        > INITIALIZING SUPABASE HANDSHAKE...<br>
-                        > PROTOCOL: HTTPS/SSL<br>
-                    </div>
-                    <div class="mt-8 flex justify-center">
-                        <button onclick="pingDatabase()" class="px-10 py-4 b-grid text-xs font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">Ping Cluster</button>
+                <div class="flex flex-col justify-end items-start md:items-end">
+                    <div class="flex gap-4">
+                         <a href="https://www.linkedin.com/in/jeevesh-r-6a117a285" target="_blank" class="w-12 h-12 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:border-cyan-500 hover:text-cyan-400 transition-all">in</a>
+                         <a href="https://x.com/JeeveshR52720" target="_blank" class="w-12 h-12 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:border-cyan-500 hover:text-cyan-400 transition-all">𝕏</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Form -->
-    <section id="contact" class="grid grid-cols-1 lg:grid-cols-2">
-        <div class="p-10 md:p-20 b-grid-r flex flex-col justify-center">
-            <h2 class="text-6xl font-bold uppercase tracking-tighter mb-8 leading-none">Drop a <br>Message.</h2>
-            <p class="text-stone-500 max-w-xs mono text-xs uppercase leading-loose">
-                Data will be transmitted to Supabase PostgreSQL and indexed for review. Open for strategy and execution roles.
-            </p>
-        </div>
-        <div class="p-10 md:p-20 bg-stone-950">
-            <div class="space-y-8">
-                <div class="group">
-                    <label class="mono text-[9px] text-stone-600 uppercase mb-2 block">Origin_Email</label>
-                    <input type="email" id="user-email" placeholder="USER@DOMAIN.COM" class="w-full bg-transparent b-grid p-6 outline-none focus:border-white transition-colors uppercase text-sm">
-                </div>
-                <div class="group">
-                    <label class="mono text-[9px] text-stone-600 uppercase mb-2 block">Data_Payload</label>
-                    <textarea id="user-message" rows="5" placeholder="MESSAGE_CONTENT..." class="w-full bg-transparent b-grid p-6 outline-none focus:border-white transition-colors uppercase text-sm"></textarea>
-                </div>
-                <button onclick="sendMessage()" id="send-btn" class="w-full py-6 bg-white text-black font-bold uppercase text-[10px] tracking-[0.5em] hover:bg-amber-500 transition-all">Execute Transfer</button>
-                <p id="form-status" class="text-center mono text-[10px] uppercase mt-4 text-stone-500"></p>
+        <!-- Marquee Strip (Cyan) -->
+        <div class="mb-24 -mx-6 md:-mx-20 py-6 marquee-wrapper">
+            <div class="marquee-content text-4xl md:text-6xl font-bold select-none heading-font tracking-tight">
+                HTML5 • CSS3 • JAVASCRIPT • SQL • SUPABASE • REACT • NODEJS • ALGORITHMS • SYSTEM-DESIGN • STRATEGY • EXECUTION • — HTML5 • CSS3 • JAVASCRIPT • SQL • SUPABASE • REACT • NODEJS • ALGORITHMS • SYSTEM-DESIGN • STRATEGY • EXECUTION • —
             </div>
         </div>
-    </section>
 
-    <footer class="p-10 text-center b-grid-t">
-        <div class="mono text-[9px] text-stone-700 uppercase tracking-[0.5em]">
-            &copy; 2026 JEEVESH R // NO_CONTENT_IS_VOID // 0.001ms_LATENCY
-        </div>
-    </footer>
+        <!-- The Lab (Bento Grid) -->
+        <section id="work" class="mb-24">
+            <h2 class="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-200">
+                <span class="w-2 h-2 bg-cyan-500 rounded-full"></span> The Laboratory
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card 1: DSA Visualizer -->
+                <div class="bento-card p-8 h-[400px] flex flex-col relative group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-100">Sorting Logic</h3>
+                            <p class="text-sm text-slate-500 mt-1">Bubble Sort Algorithm Visualizer</p>
+                        </div>
+                        <button onclick="runSortingDemo()" class="w-10 h-10 rounded-full bg-cyan-500 text-black flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.4)]">▶</button>
+                    </div>
+                    <div class="flex-1 w-full relative">
+                        <canvas id="sortCanvas"></canvas>
+                    </div>
+                </div>
+
+                <!-- Card 2: Database Console -->
+                <div class="bento-card p-8 h-[400px] flex flex-col relative">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-100">Supabase Link</h3>
+                            <p class="text-sm text-slate-500 mt-1">Real-time Connection Check</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></div>
+                            <span class="text-xs text-cyan-500 font-mono">LIVE</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 bg-[#020617] rounded-xl border border-slate-800 p-4 mono text-xs text-slate-400 overflow-y-auto mb-4" id="db-log">
+                        > Initializing Handshake...<br>
+                        > Protocol: Secure TLS 1.3<br>
+                    </div>
+                    <button onclick="pingDatabase()" class="w-full py-3 bg-slate-800 rounded-lg text-xs font-bold uppercase tracking-widest text-cyan-400 hover:bg-cyan-500 hover:text-black transition-colors">Ping Server</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="mb-24">
+            <div class="bento-card p-8 md:p-16">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <h2 class="text-4xl font-bold mb-6 text-slate-50">Let's work together.</h2>
+                        <p class="text-slate-400 mb-8">
+                            Looking to build something unique? Send a message directly to my SQL database.
+                        </p>
+                        <div class="space-y-2 text-sm text-slate-500 font-mono">
+                            <p>EMAIL: jeevesh.r4@gmail.com</p>
+                            <p>STATUS: ACCEPTING PROJECTS</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-xs uppercase tracking-widest text-slate-500">Your Email</label>
+                            <input type="email" id="user-email" class="w-full bg-[#020617] border border-slate-800 rounded-lg p-4 text-white outline-none focus:border-cyan-500 transition-colors" placeholder="hello@design.com">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs uppercase tracking-widest text-slate-500">Message</label>
+                            <textarea id="user-message" rows="4" class="w-full bg-[#020617] border border-slate-800 rounded-lg p-4 text-white outline-none focus:border-cyan-500 transition-colors" placeholder="Tell me about the project..."></textarea>
+                        </div>
+                        <button onclick="sendMessage()" id="send-btn" class="w-full bg-slate-100 text-black font-bold py-4 rounded-lg hover:bg-cyan-400 transition-colors shadow-lg">
+                            Send Message
+                        </button>
+                        <p id="form-status" class="text-center text-xs text-slate-500 mt-2 font-mono"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="flex justify-between items-center pt-8 border-t border-slate-800 text-xs text-slate-600 uppercase tracking-wider">
+            <span>© 2026 Jeevesh R.</span>
+            <span>Vibe Coder // Bangalore</span>
+        </footer>
+
+    </main>
 
     <!-- Logic Script -->
     <script>
-        // --- 1. SUPABASE ---
-        const PROJECT_URL = "https://xkxkrldlbursvnvtrrtx.supabase.co";
-        const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhreGtybGRsYnVyc3ZudnRycnR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MDc4NTIsImV4cCI6MjA4NDk4Mzg1Mn0.5SRtjpv4FkEDnOnNorLAKLAJp_HWMt3u8OH1dtRP2cw"; // PASTE YOUR ANON KEY HERE
+        // --- 1. SUPABASE CONFIGURATION ---
+        const SUPABASE_URL = "https://xkxkrldlbursvnvtrrtx.supabase.co"; 
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhreGtybGRsYnVyc3ZudnRycnR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MDc4NTIsImV4cCI6MjA4NDk4Mzg1Mn0.5SRtjpv4FkEDnOnNorLAKLAJp_HWMt3u8OH1dtRP2cw"; // <--- PASTE YOUR ANON KEY HERE
         
-        const client = (PROJECT_URL && ANON_KEY) 
-            ? supabase.createClient(PROJECT_URL, ANON_KEY) 
+        const client = (SUPABASE_URL && SUPABASE_KEY) 
+            ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) 
             : null;
 
+        // Visitor Tracking
         async function logVisit() {
             if (!client) return;
             try {
@@ -270,105 +259,92 @@
         }
         window.addEventListener('load', logVisit);
 
+        // Contact Form
         async function sendMessage() {
             const email = document.getElementById('user-email').value;
             const message = document.getElementById('user-message').value;
             const status = document.getElementById('form-status');
             const btn = document.getElementById('send-btn');
 
-            if (!client) { status.innerText = "[ERR] KEY_MISSING"; return; }
-            if (!email || !message) { status.innerText = "[ERR] INPUT_REQUIRED"; return; }
+            if (!client) { status.innerText = "Error: API Key Missing"; return; }
+            if (!email || !message) { status.innerText = "Please fill all fields"; return; }
 
-            btn.innerText = "TRANSMITTING...";
+            btn.innerText = "Sending...";
             const { error } = await client.from('contact_messages').insert([{ email, message }]);
             
-            if (error) status.innerText = `[FAIL] ${error.message}`;
+            if (error) status.innerText = "Error: " + error.message;
             else {
-                status.innerText = "[SUCCESS] PAYLOAD_DELIVERED";
+                status.innerText = "MESSAGE RECEIVED // SAVED TO DB";
+                status.classList.add('text-cyan-400');
                 document.getElementById('user-email').value = "";
                 document.getElementById('user-message').value = "";
             }
-            btn.innerText = "EXECUTE TRANSFER";
+            btn.innerText = "Send Message";
         }
 
         // --- 2. CUSTOM CURSOR ---
-        const dot = document.getElementById('cursor-dot');
-        const outline = document.getElementById('cursor-outline');
-
+        const cursor = document.getElementById('cursor');
         window.addEventListener('mousemove', (e) => {
-            dot.style.left = e.clientX + 'px';
-            dot.style.top = e.clientY + 'px';
-            
-            // Outline follows with slight delay via CSS transition
-            setTimeout(() => {
-                outline.style.left = e.clientX + 'px';
-                outline.style.top = e.clientY + 'px';
-            }, 50);
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
         });
 
-        // --- 3. THREE.JS SPIRAL ---
-        window.onload = function() {
+        // --- 3. THREE.JS BACKGROUND ---
+        (function initThree() {
             const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true, antialias: true });
-            
             const container = document.getElementById('three-container');
-            renderer.setSize(container.clientWidth, container.clientHeight);
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
             
-            // Create a Spiral Geometry
-            const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
-            const material = new THREE.MeshBasicMaterial({ color: 0x444444, wireframe: true });
-            const spiral = new THREE.Mesh(geometry, material);
-            scene.add(spiral);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Icosahedron with Cyan Wireframe
+            const geometry = new THREE.IcosahedronGeometry(12, 1);
+            const material = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.15 });
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
 
-            camera.position.z = 30;
+            camera.position.z = 25;
 
             function animate() {
                 requestAnimationFrame(animate);
-                spiral.rotation.x += 0.005;
-                spiral.rotation.y += 0.01;
+                sphere.rotation.x += 0.001;
+                sphere.rotation.y += 0.002;
                 renderer.render(scene, camera);
             }
             animate();
 
             window.addEventListener('resize', () => {
-                renderer.setSize(container.clientWidth, container.clientHeight);
-                camera.aspect = container.clientWidth / container.clientHeight;
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
             });
-        };
+        })();
 
-        // --- 4. NAVIGATION ---
-        function scrollToSection(id) {
-            window.scrollTo({ top: document.getElementById(id).offsetTop - 80, behavior: 'smooth' });
-        }
-
-        function switchTab(tab) {
-            document.getElementById('content-dsa').classList.toggle('hidden', tab !== 'dsa');
-            document.getElementById('content-db').classList.toggle('hidden', tab !== 'db');
-            
-            document.getElementById('tab-dsa').className = tab === 'dsa' ? 'w-full text-left p-6 b-grid bg-white text-black font-bold uppercase text-[10px] tracking-widest' : 'w-full text-left p-6 b-grid text-stone-500 font-bold uppercase text-[10px] tracking-widest opacity-50';
-            document.getElementById('tab-db').className = tab === 'db' ? 'w-full text-left p-6 b-grid bg-white text-black font-bold uppercase text-[10px] tracking-widest' : 'w-full text-left p-6 b-grid text-stone-500 font-bold uppercase text-[10px] tracking-widest opacity-50';
-        }
-
+        // --- 4. DATABASE PING ---
         function pingDatabase() {
             const log = document.getElementById('db-log');
             const time = new Date().toLocaleTimeString();
-            log.innerHTML += `<span class="text-amber-500">[${time}]</span> > Ping sent to Supabase Cluster...<br>`;
+            log.innerHTML += `<span style="color:#06b6d4">[${time}]</span> > Pinging Supabase...<br>`;
             setTimeout(() => {
-                log.innerHTML += `<span class="text-white">[${time}]</span> > Connection established via PostgreSQL.<br>`;
+                log.innerHTML += `<span style="color:#fff">[${time}]</span> > Connection 200 OK.<br>`;
                 log.scrollTop = log.scrollHeight;
-            }, 500);
+            }, 400);
         }
 
         // --- 5. DSA CHART ---
         const ctx = document.getElementById('sortCanvas').getContext('2d');
-        let dsaData = [30, 80, 50, 90, 20, 70, 40, 60, 10];
-        const dsaChart = new Chart(ctx, {
+        let dsaData = [40, 10, 80, 50, 20, 90, 30, 60, 70];
+        const chart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: dsaData.map(() => ''),
-                datasets: [{ data: dsaData, backgroundColor: '#ffffff', borderColor: '#f59e0b', borderWidth: 1 }]
+                datasets: [{ 
+                    data: dsaData, 
+                    backgroundColor: '#06b6d4', 
+                    borderRadius: 4,
+                    hoverBackgroundColor: '#fff'
+                }]
             },
             options: { 
                 responsive: true, maintainAspectRatio: false, 
@@ -383,9 +359,9 @@
                 for (let j = 0; j < arr.length - i - 1; j++) {
                     if (arr[j] > arr[j + 1]) {
                         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                        dsaChart.data.datasets[0].data = [...arr];
-                        dsaChart.update('none');
-                        await new Promise(r => setTimeout(r, 100));
+                        chart.data.datasets[0].data = [...arr];
+                        chart.update('none');
+                        await new Promise(r => setTimeout(r, 80));
                     }
                 }
             }
