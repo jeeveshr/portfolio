@@ -1,371 +1,582 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeevesh R | Vibe Coder</title>
-    <!-- Core Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         :root {
-            /* DEEP MIDNIGHT THEME */
-            --bg: #020617; /* Slate 950 */
-            --card-bg: #0f172a; /* Slate 900 */
-            --border: #1e293b; /* Slate 800 */
-            --text-main: #f8fafc; /* Slate 50 */
-            --text-muted: #94a3b8; /* Slate 400 */
-            --accent: #06b6d4; /* Cyan 500 */
-            --accent-glow: rgba(6, 182, 212, 0.5);
+            /* SANJAY RAYON INSPIRED PALETTE */
+            --bg-main: #141414;
+            --bg-card: #1b1b1b;
+            --text-main: #f1f0ec;
+            --text-muted: #989898;
+            --accent: #fe5935;
+            /* Vibrant Orange */
+            --accent-glow: rgba(254, 89, 53, 0.3);
         }
 
         body {
-            background-color: var(--bg);
+            background-color: var(--bg-main);
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
 
-        h1, h2, h3, .heading-font { font-family: 'Space Grotesk', sans-serif; }
-
-        /* NOISE TEXTURE */
-        body::before {
-            content: "";
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-            pointer-events: none; z-index: 50; mix-blend-mode: overlay;
+        ::selection {
+            background-color: var(--accent);
+            color: #fff;
         }
 
-        /* Custom Cursor - Cyan */
-        * { cursor: none; }
-        #cursor {
-            width: 12px; height: 12px; background: var(--accent);
-            position: fixed; pointer-events: none; z-index: 9999;
-            border-radius: 50%; box-shadow: 0 0 10px var(--accent);
-            transition: transform 0.1s ease;
-            mix-blend-mode: normal; /* Changed from difference for better visibility on blue */
-        }
-        
-        /* Bento Card Styles */
-        .bento-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            overflow: hidden;
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .bento-card:hover {
-            border-color: #334155;
-            box-shadow: 0 10px 40px -10px rgba(6, 182, 212, 0.1);
-            transform: translateY(-2px);
+        h1,
+        h2,
+        h3,
+        .heading-font {
+            font-family: 'Inter Tight', sans-serif;
         }
 
-        /* Marquee */
-        .marquee-wrapper {
-            width: 100%; overflow: hidden; white-space: nowrap;
-            background: var(--accent); /* Cyan Background */
-            color: #020617; /* Dark Text */
-        }
-        .marquee-content {
-            display: inline-block;
-            animation: scroll 20s linear infinite;
-        }
-        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-        /* Status Dot Pulse - Cyan */
-        .pulse-dot {
-            width: 8px; height: 8px; background-color: var(--accent);
-            border-radius: 50%; display: inline-block;
-            box-shadow: 0 0 0 0 var(--accent-glow);
-            animation: pulse-cyan 2s infinite;
-        }
-        @keyframes pulse-cyan {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 var(--accent-glow); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(6, 182, 212, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        /* Three.js Background */
-        #three-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; opacity: 0.6;
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
         }
 
-        .mono { font-family: 'Courier New', monospace; }
-        
-        /* Selection Color */
-        ::selection { background: var(--accent); color: #000; }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* ANIMATIONS */
+        .fade-up {
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ORANGE ACCENT HOVER */
+        .hover-orange:hover {
+            color: var(--accent);
+            transition: color 0.3s ease;
+        }
+
+        .border-orange-hover:hover {
+            border-color: var(--accent);
+            transition: border-color 0.3s ease;
+        }
+
+        /* LOADER */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-main);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter Tight', sans-serif;
+            font-size: 80px;
+            font-weight: 300;
+            color: var(--text-main);
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
     </style>
 </head>
+
 <body class="antialiased">
 
-    <div id="cursor"></div>
-    <div id="three-container"><canvas id="three-canvas"></canvas></div>
+    <!-- LOADER -->
+    <div id="loader">0%</div>
 
-    <!-- Floating Nav -->
-    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-40">
-        <div class="bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-full px-6 py-3 flex gap-8 shadow-2xl shadow-cyan-900/10">
-            <a href="#hero" class="text-xs font-medium text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">Home</a>
-            <a href="#work" class="text-xs font-medium text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">Lab</a>
-            <a href="#contact" class="text-xs font-medium text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">Contact</a>
+    <!-- NAVIGATION -->
+    <nav
+        class="fixed top-0 left-0 w-full z-50 mix-blend-difference px-6 py-6 md:px-12 flex justify-between items-center opacity-0 fade-up delay-300">
+        <a href="#" class="text-xl font-bold tracking-tight text-white hover:text-[#fe5935] transition-colors">Jeevesh
+            R.</a>
+        <div class="hidden md:flex gap-8 text-sm font-medium text-gray-300">
+            <a href="#work" class="hover-orange">Work</a>
+            <a href="#about" class="hover-orange">About</a>
+            <a href="#contact" class="hover-orange">Contact</a>
         </div>
+        <a href="mailto:jeevesh.r4@gmail.com"
+            class="px-5 py-2 rounded-full border border-white/20 text-sm hover:bg-[#fe5935] hover:border-[#fe5935] hover:text-white transition-all">
+            Let's Talk
+        </a>
     </nav>
 
-    <main class="max-w-5xl mx-auto px-6 pt-32 pb-20 relative z-10">
-        
-        <!-- Hero Section -->
-        <section id="hero" class="mb-24">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="bg-slate-900 border border-slate-800 rounded-full px-3 py-1 flex items-center gap-2">
-                    <div class="pulse-dot"></div>
-                    <span class="text-[10px] uppercase tracking-wider text-cyan-400 font-medium">System Online</span>
-                </div>
-                <div class="bg-slate-900 border border-slate-800 rounded-full px-3 py-1">
-                    <span class="text-[10px] uppercase tracking-wider text-slate-500 font-medium">Bangalore, IN</span>
-                </div>
-            </div>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-            <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8 text-slate-50">
-                VIBE<br>
-                <span class="text-slate-600">CODER.</span>
-            </h1>
+    <!-- CUSTOM CURSOR -->
+    <div id="cursor-dot"
+        class="fixed w-2 h-2 bg-[#fe5935] rounded-full pointer-events-none z-[9999] mix-blend-difference opacity-0 transition-opacity duration-300">
+    </div>
+    <div id="cursor-outline"
+        class="fixed w-8 h-8 border border-[#fe5935] rounded-full pointer-events-none z-[9999] opacity-0 transition-all duration-100 ease-out translate-x-[-12px] translate-y-[-12px]">
+    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <p class="text-lg text-slate-400 leading-relaxed max-w-md">
-                    I'm <strong class="text-cyan-400">Jeevesh R</strong>. I build digital experiences at the intersection of strategy and execution. Currently mastering the art of Vibe Coding with HTML, CSS, JS & SQL.
-                </p>
-                <div class="flex flex-col justify-end items-start md:items-end">
-                    <div class="flex gap-4">
-                         <a href="https://www.linkedin.com/in/jeevesh-r-6a117a285" target="_blank" class="w-12 h-12 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:border-cyan-500 hover:text-cyan-400 transition-all">in</a>
-                         <a href="https://x.com/JeeveshR52720" target="_blank" class="w-12 h-12 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:border-cyan-500 hover:text-cyan-400 transition-all">𝕏</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Marquee Strip (Cyan) -->
-        <div class="mb-24 -mx-6 md:-mx-20 py-6 marquee-wrapper">
-            <div class="marquee-content text-4xl md:text-6xl font-bold select-none heading-font tracking-tight">
-                HTML5 • CSS3 • JAVASCRIPT • SQL • SUPABASE • REACT • NODEJS • ALGORITHMS • SYSTEM-DESIGN • STRATEGY • EXECUTION • — HTML5 • CSS3 • JAVASCRIPT • SQL • SUPABASE • REACT • NODEJS • ALGORITHMS • SYSTEM-DESIGN • STRATEGY • EXECUTION • —
-            </div>
-        </div>
-
-        <!-- The Lab (Bento Grid) -->
-        <section id="work" class="mb-24">
-            <h2 class="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-200">
-                <span class="w-2 h-2 bg-cyan-500 rounded-full"></span> The Laboratory
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Card 1: DSA Visualizer -->
-                <div class="bento-card p-8 h-[400px] flex flex-col relative group">
-                    <div class="flex justify-between items-start mb-6">
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-100">Sorting Logic</h3>
-                            <p class="text-sm text-slate-500 mt-1">Bubble Sort Algorithm Visualizer</p>
-                        </div>
-                        <button onclick="runSortingDemo()" class="w-10 h-10 rounded-full bg-cyan-500 text-black flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.4)]">▶</button>
-                    </div>
-                    <div class="flex-1 w-full relative">
-                        <canvas id="sortCanvas"></canvas>
-                    </div>
-                </div>
-
-                <!-- Card 2: Database Console -->
-                <div class="bento-card p-8 h-[400px] flex flex-col relative">
-                    <div class="flex justify-between items-start mb-6">
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-100">Supabase Link</h3>
-                            <p class="text-sm text-slate-500 mt-1">Real-time Connection Check</p>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></div>
-                            <span class="text-xs text-cyan-500 font-mono">LIVE</span>
-                        </div>
-                    </div>
-                    <div class="flex-1 bg-[#020617] rounded-xl border border-slate-800 p-4 mono text-xs text-slate-400 overflow-y-auto mb-4" id="db-log">
-                        > Initializing Handshake...<br>
-                        > Protocol: Secure TLS 1.3<br>
-                    </div>
-                    <button onclick="pingDatabase()" class="w-full py-3 bg-slate-800 rounded-lg text-xs font-bold uppercase tracking-widest text-cyan-400 hover:bg-cyan-500 hover:text-black transition-colors">Ping Server</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="mb-24">
-            <div class="bento-card p-8 md:p-16">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div>
-                        <h2 class="text-4xl font-bold mb-6 text-slate-50">Let's work together.</h2>
-                        <p class="text-slate-400 mb-8">
-                            Looking to build something unique? Send a message directly to my SQL database.
-                        </p>
-                        <div class="space-y-2 text-sm text-slate-500 font-mono">
-                            <p>EMAIL: jeevesh.r4@gmail.com</p>
-                            <p>STATUS: ACCEPTING PROJECTS</p>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-6">
-                        <div class="space-y-2">
-                            <label class="text-xs uppercase tracking-widest text-slate-500">Your Email</label>
-                            <input type="email" id="user-email" class="w-full bg-[#020617] border border-slate-800 rounded-lg p-4 text-white outline-none focus:border-cyan-500 transition-colors" placeholder="hello@design.com">
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-xs uppercase tracking-widest text-slate-500">Message</label>
-                            <textarea id="user-message" rows="4" class="w-full bg-[#020617] border border-slate-800 rounded-lg p-4 text-white outline-none focus:border-cyan-500 transition-colors" placeholder="Tell me about the project..."></textarea>
-                        </div>
-                        <button onclick="sendMessage()" id="send-btn" class="w-full bg-slate-100 text-black font-bold py-4 rounded-lg hover:bg-cyan-400 transition-colors shadow-lg">
-                            Send Message
-                        </button>
-                        <p id="form-status" class="text-center text-xs text-slate-500 mt-2 font-mono"></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer class="flex justify-between items-center pt-8 border-t border-slate-800 text-xs text-slate-600 uppercase tracking-wider">
-            <span>© 2026 Jeevesh R.</span>
-            <span>Vibe Coder // Bangalore</span>
-        </footer>
-
-    </main>
-
-    <!-- Logic Script -->
     <script>
-        // --- 1. SUPABASE CONFIGURATION ---
-        const SUPABASE_URL = "https://xkxkrldlbursvnvtrrtx.supabase.co"; 
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhreGtybGRsYnVyc3ZudnRycnR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MDc4NTIsImV4cCI6MjA4NDk4Mzg1Mn0.5SRtjpv4FkEDnOnNorLAKLAJp_HWMt3u8OH1dtRP2cw"; // <--- PASTE YOUR ANON KEY HERE
-        
-        const client = (SUPABASE_URL && SUPABASE_KEY) 
-            ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) 
+        // --- 1. SUPABASE ---
+        const PROJECT_URL = "https://xkxkrldlbursvnvtrrtx.supabase.co";
+        const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhreGtybGRsYnVyc3ZudnRycnR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MDc4NTIsImV4cCI6MjA4NDk4Mzg1Mn0.5SRtjpv4FkEDnOnNorLAKLAJp_HWMt3u8OH1dtRP2cw";
+
+        // Initialize client if available
+        const client = (typeof supabase !== 'undefined' && PROJECT_URL && ANON_KEY)
+            ? supabase.createClient(PROJECT_URL, ANON_KEY)
             : null;
 
-        // Visitor Tracking
         async function logVisit() {
             if (!client) return;
             try {
+                // Determine table name - assuming 'site_visits' based on context or fail silently
                 await client.from('site_visits').insert([{
                     user_agent: navigator.userAgent,
                     screen_resolution: `${window.screen.width}x${window.screen.height}`,
                     language: navigator.language
                 }]);
-            } catch (e) {}
+            } catch (e) { console.log('Analytics error:', e); }
         }
         window.addEventListener('load', logVisit);
 
-        // Contact Form
         async function sendMessage() {
-            const email = document.getElementById('user-email').value;
-            const message = document.getElementById('user-message').value;
+            const emailInput = document.getElementById('user-email');
+            const messageInput = document.getElementById('user-message');
             const status = document.getElementById('form-status');
             const btn = document.getElementById('send-btn');
 
-            if (!client) { status.innerText = "Error: API Key Missing"; return; }
-            if (!email || !message) { status.innerText = "Please fill all fields"; return; }
+            if (!client) { status.innerText = "[ERR] KEY_MISSING_OR_SDK_LOAD_FAIL"; return; }
+            if (!emailInput.value || !messageInput.value) { status.innerText = "[ERR] INPUT_REQUIRED"; return; }
 
-            btn.innerText = "Sending...";
-            const { error } = await client.from('contact_messages').insert([{ email, message }]);
-            
-            if (error) status.innerText = "Error: " + error.message;
-            else {
-                status.innerText = "MESSAGE RECEIVED // SAVED TO DB";
-                status.classList.add('text-cyan-400');
-                document.getElementById('user-email').value = "";
-                document.getElementById('user-message').value = "";
+            // Email Syntax Check
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                status.innerText = "[ERR] INVALID_EMAIL_SYNTAX";
+                status.classList.add('text-red-500');
+                return;
             }
-            btn.innerText = "Send Message";
+
+            const originalBtnText = btn.innerText;
+            btn.innerText = "TRANSMITTING...";
+            btn.disabled = true;
+
+            try {
+                const { error } = await client.from('contact_messages').insert([{
+                    email: emailInput.value,
+                    message: messageInput.value
+                }]);
+
+                if (error) {
+                    status.innerText = `[FAIL] ${error.message}`;
+                    status.classList.add('text-red-500');
+                } else {
+                    status.innerText = "[SUCCESS] PAYLOAD_DELIVERED";
+                    status.classList.remove('text-red-500');
+                    status.classList.add('text-green-500');
+                    emailInput.value = "";
+                    messageInput.value = "";
+                }
+            } catch (err) {
+                status.innerText = `[CRITICAL_FAIL] ${err.message}`;
+            }
+
+            btn.innerText = originalBtnText;
+            btn.disabled = false;
         }
 
         // --- 2. CUSTOM CURSOR ---
-        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+
         window.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            // Dot follows directly
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            cursorDot.style.opacity = '1';
+
+            // Outline follows with slight delay/smoothing
+            cursorOutline.style.left = `${posX}px`;
+            cursorOutline.style.top = `${posY}px`;
+            cursorOutline.style.opacity = '1';
+
+            cursorOutline.animate({
+                left: `${posX - 16}px`,
+                top: `${posY - 16}px`
+            }, { duration: 500, fill: "forwards" });
         });
 
-        // --- 3. THREE.JS BACKGROUND ---
-        (function initThree() {
-            const scene = new THREE.Scene();
-            const container = document.getElementById('three-container');
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
-            
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            
-            // Icosahedron with Cyan Wireframe
-            const geometry = new THREE.IcosahedronGeometry(12, 1);
-            const material = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.15 });
-            const sphere = new THREE.Mesh(geometry, material);
-            scene.add(sphere);
-
-            camera.position.z = 25;
-
-            function animate() {
-                requestAnimationFrame(animate);
-                sphere.rotation.x += 0.001;
-                sphere.rotation.y += 0.002;
-                renderer.render(scene, camera);
-            }
-            animate();
-
-            window.addEventListener('resize', () => {
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
+        // Hover Effect
+        document.querySelectorAll('a, button, .cursor-hover, input, textarea').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.classList.add('scale-150', 'bg-[#fe5935]/20');
+                cursorDot.classList.add('scale-0');
             });
-        })();
-
-        // --- 4. DATABASE PING ---
-        function pingDatabase() {
-            const log = document.getElementById('db-log');
-            const time = new Date().toLocaleTimeString();
-            log.innerHTML += `<span style="color:#06b6d4">[${time}]</span> > Pinging Supabase...<br>`;
-            setTimeout(() => {
-                log.innerHTML += `<span style="color:#fff">[${time}]</span> > Connection 200 OK.<br>`;
-                log.scrollTop = log.scrollHeight;
-            }, 400);
-        }
-
-        // --- 5. DSA CHART ---
-        const ctx = document.getElementById('sortCanvas').getContext('2d');
-        let dsaData = [40, 10, 80, 50, 20, 90, 30, 60, 70];
-        const chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: dsaData.map(() => ''),
-                datasets: [{ 
-                    data: dsaData, 
-                    backgroundColor: '#06b6d4', 
-                    borderRadius: 4,
-                    hoverBackgroundColor: '#fff'
-                }]
-            },
-            options: { 
-                responsive: true, maintainAspectRatio: false, 
-                scales: { y: { display: false }, x: { display: false } }, 
-                plugins: { legend: false } 
-            }
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.classList.remove('scale-150', 'bg-[#fe5935]/20');
+                cursorDot.classList.remove('scale-0');
+            });
         });
+    </script>
 
-        async function runSortingDemo() {
-            let arr = [...dsaData];
-            for (let i = 0; i < arr.length; i++) {
-                for (let j = 0; j < arr.length - i - 1; j++) {
-                    if (arr[j] > arr[j + 1]) {
-                        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                        chart.data.datasets[0].data = [...arr];
-                        chart.update('none');
-                        await new Promise(r => setTimeout(r, 80));
-                    }
-                }
+    <main class="w-full relative">
+
+        <!-- HERO SECTION -->
+        <section class="min-h-screen flex flex-col justify-center px-6 md:px-20 lg:px-32 pt-20">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl md:text-8xl font-medium tracking-tight leading-[1.1] mb-8 fade-up text-[#f1f0ec]">
+                    Creative thinking<br>
+                    <span class="text-[#989898]">Vibe Coder.</span>
+                </h1>
+                <p class="text-lg md:text-xl text-[#989898] max-w-2xl leading-relaxed fade-up delay-100">
+                    I’m <span class="text-white">Jeevesh</span>, a designer & developer. I bridge the gap between design
+                    and code, using tools like <span class="text-[#fe5935]">Framer</span> & <span
+                        class="text-[#fe5935]">Supabase</span>.
+                </p>
+
+                <div class="mt-12 flex gap-4 fade-up delay-200">
+                    <div class="w-3 h-3 bg-[#fe5935] rounded-full animate-pulse mt-2"></div>
+                    <p class="text-sm font-mono text-[#989898] uppercase tracking-widest">Available for new projects</p>
+                </div>
+            </div>
+
+            <!-- SCROLL INDICATOR -->
+            <div class="absolute bottom-10 right-10 md:right-20 fade-up delay-300 block">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    class="animate-bounce text-[#989898]">
+                    <path d="M12 5v14M19 12l-7 7-7-7" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- WORK SECTION -->
+        <section id="work" class="px-6 md:px-20 lg:px-32 py-24">
+            <h2 class="text-xs font-mono uppercase tracking-widest text-[#989898] mb-12">Selected Work (2024-26)</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+
+                <!-- Project 1 -->
+                <div class="group cursor-pointer">
+                    <div
+                        class="relative overflow-hidden rounded-lg mb-6 bg-[#1b1b1b] aspect-[4/3] border border-white/5">
+                        <div
+                            class="absolute inset-0 flex items-center justify-center text-[#989898] group-hover:scale-105 transition-transform duration-500">
+                            <!-- Placeholder visual -->
+                            <div class="text-center">
+                                <i data-lucide="bar-chart-2"
+                                    class="w-16 h-16 mx-auto mb-4 text-[#2a2a2a] group-hover:text-[#fe5935] transition-colors"></i>
+                                <span class="text-sm">Sorting Visualizer</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="flex justify-between items-baseline border-b border-white/10 pb-4 group-hover:border-[#fe5935] transition-colors">
+                        <h3 class="text-2xl font-medium text-[#f1f0ec]">Algorithm Lab</h3>
+                        <span class="text-sm text-[#989898]">2025</span>
+                    </div>
+                    <p class="mt-2 text-[#989898] text-sm">Interactive Data Structure Visualization using JS Canvas.</p>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="group cursor-pointer md:mt-24"> <!-- Staggered layout -->
+                    <div
+                        class="relative overflow-hidden rounded-lg mb-6 bg-[#1b1b1b] aspect-[4/3] border border-white/5">
+                        <div
+                            class="absolute inset-0 flex items-center justify-center text-[#989898] group-hover:scale-105 transition-transform duration-500">
+                            <!-- Placeholder visual -->
+                            <div class="text-center">
+                                <i data-lucide="database"
+                                    class="w-16 h-16 mx-auto mb-4 text-[#2a2a2a] group-hover:text-[#fe5935] transition-colors"></i>
+                                <span class="text-sm">Supabase Connector</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="flex justify-between items-baseline border-b border-white/10 pb-4 group-hover:border-[#fe5935] transition-colors">
+                        <h3 class="text-2xl font-medium text-[#f1f0ec]">DB Console</h3>
+                        <span class="text-sm text-[#989898]">2025</span>
+                    </div>
+                    <p class="mt-2 text-[#989898] text-sm">Real-time database management interface.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ABOUT / SKILLS -->
+        <section id="about" class="px-6 md:px-20 lg:px-32 py-24 bg-[#1b1b1b]">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-medium mb-8 leading-tight">
+                        Visual storytelling through code.
+                    </h2>
+                    <p class="text-[#989898] text-lg leading-relaxed mb-8">
+                        I bridge the gap between design and engineering. My approach is simple: create things that look
+                        beautiful and work flawlessly.
+                    </p>
+
+                    <!-- Database Integration Status -->
+                    <div class="flex items-center gap-3 py-4 px-5 bg-black/20 rounded border border-[#fe5935]/30 w-fit">
+                        <div class="w-2 h-2 rounded-full bg-[#eca400] animate-pulse"></div>
+                        <span class="text-xs text-[#f1f0ec] font-mono">SUPABASE: INITIALIZED</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-end mb-8">
+                        <h3 class="text-xs font-mono uppercase tracking-widest text-[#989898]">Tools & Tech</h3>
+                    </div>
+
+                    <!-- Tools Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+
+                        <!-- Figma -->
+                        <div
+                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
+                            <svg class="h-8 w-8 mb-3 text-[#989898] group-hover:text-white transition-colors"
+                                viewBox="0 0 38 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M19 28.5C19 25.9863 20.0469 23.5756 21.9103 21.7981C23.7738 20.0206 26.3013 19.022 29 19.022C31.6987 19.022 34.2263 20.0206 36.0897 21.7981C37.9531 23.5756 39 25.9863 39 28.5C39 31.0137 37.9531 33.4244 36.0897 35.2019C34.2263 36.9794 31.6987 37.978 29 37.978H19V28.5Z"
+                                    fill="#1ABCFE" />
+                                <path
+                                    d="M19 47.4559C19 44.9422 20.0469 42.5315 21.9103 40.7541C23.7738 38.9766 26.3013 37.978 29 37.978C31.6987 37.978 34.2263 38.9766 36.0897 40.7541C37.9531 42.5315 39 44.9422 39 47.4559C39 49.9696 37.9531 52.3803 36.0897 54.1578C34.2263 55.9353 31.6987 56.9338 29 56.9338H19V47.4559Z"
+                                    fill="#0ACF83" />
+                                <path
+                                    d="M19 0.0441284H9C6.30127 0.0441284 3.77375 1.04273 1.91035 2.82025C0.0469446 4.59778 -1 7.00844 -1 9.52219C-1 12.0359 0.0469446 14.4466 1.91035 16.2241C3.77375 18.0016 6.30127 19.0003 9 19.0003H19V0.0441284Z"
+                                    fill="#F24E1E" />
+                                <path
+                                    d="M19 19.0002H9C6.30127 19.0002 3.77375 19.9989 1.91035 21.7764C0.0469446 23.5539 -1 25.9646 -1 28.4783C-1 30.9921 0.0469446 33.4027 1.91035 35.1802C3.77375 36.9578 6.30127 37.9564 9 37.9564H19V19.0002Z"
+                                    fill="#A259FF" />
+                                <path
+                                    d="M9 37.9564C6.30127 37.9564 3.77375 38.955 1.91035 40.7325C0.0469446 42.51 -1 44.9207 -1 47.4344C-1 49.9482 0.0469446 52.3588 1.91035 54.1363C3.77375 55.9138 6.30127 56.9125 9 56.9125C11.6987 56.9125 14.2263 55.9138 16.0897 54.1363C17.9531 52.3588 19 49.9482 19 47.4344V37.9564H9Z"
+                                    fill="#1ABCFE" />
+                            </svg>
+                            <span class="text-xs text-white/70">Figma</span>
+                        </div>
+
+                        <!-- Framer -->
+                        <div
+                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
+                            <svg class="h-8 w-8 mb-3 text-white group-hover:text-[#fe5935] transition-colors"
+                                viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 0h16v8h-8zM4 16h8v8zM4 8h8l8 8H4z" />
+                            </svg>
+                            <span class="text-xs text-white/70">Framer</span>
+                        </div>
+
+                        <!-- Photoshop -->
+                        <div
+                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
+                            <div
+                                class="h-8 w-8 mb-3 border-2 border-[#31A8FF] rounded flex items-center justify-center text-[#31A8FF] font-bold text-sm group-hover:bg-[#31A8FF] group-hover:text-black transition-all">
+                                Ps</div>
+                            <span class="text-xs text-white/70">Photoshop</span>
+                        </div>
+
+                        <!-- Lightroom -->
+                        <div
+                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
+                            <div
+                                class="h-8 w-8 mb-3 border-2 border-[#31A8FF] rounded flex items-center justify-center text-[#31A8FF] font-bold text-sm group-hover:bg-[#31A8FF] group-hover:text-black transition-all">
+                                Lr</div>
+                            <span class="text-xs text-white/70">Lightroom</span>
+                        </div>
+
+                        <!-- Filmora (Using Generic Video Icon) -->
+                        <div
+                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
+                            <svg class="h-8 w-8 mb-3 text-[#989898] group-hover:text-[#fe5935] transition-colors"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                                <line x1="7" y1="2" x2="7" y2="22"></line>
+                                <line x1="17" y1="2" x2="17" y2="22"></line>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <line x1="2" y1="7" x2="7" y2="7"></line>
+                                <line x1="2" y1="17" x2="7" y2="17"></line>
+                                <line x1="17" y1="17" x2="22" y2="17"></line>
+                                <line x1="17" y1="7" x2="22" y2="7"></line>
+                            </svg>
+                            <span class="text-xs text-white/70">Filmora</span>
+                        </div>
+
+                        <!-- Supabase -->
+                        <div
+                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
+                            <svg class="h-8 w-8 mb-3 text-[#3ECF8E] group-hover:text-white transition-colors"
+                                viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.6667 0H1.66669L7.50002 10H1.66669L13.3334 24V14H19.1667L11.6667 0Z" />
+                            </svg>
+                            <span class="text-xs text-white/70">Supabase</span>
+                        </div>
+
+                        <!-- Fiverr -->
+                        <!-- Fiverr -->
+                        <!-- Fiverr -->
+                        <a href="https://www.fiverr.com/jeeveshr489/buying?source=avatar_menu_profile" target="_blank"
+                            class="p-4 border border-white/10 rounded hover:border-[#1DBF73] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414] cursor-none cursor-hover">
+                            <img src="assets/fiverr.png" alt="Fiverr"
+                                class="h-10 w-10 mb-2 object-contain transition-all opacity-100">
+                            <span class="text-xs text-white/70">Hire Me</span>
+                        </a>
+
+                        <!-- Stripe -->
+                        <div
+                            class="p-4 border border-white/10 rounded hover:border-[#635BFF] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
+                            <svg class="h-8 w-8 mb-3 text-[#635BFF] group-hover:text-white transition-colors"
+                                viewBox="0 0 40 40" fill="currentColor">
+                                <path
+                                    d="M14.9 14.7c0 1.9-1.4 2.8-4.4 2.8-3 0-4.9-.5-6.4-1l-.9 3.9c1.2.5 3.8 1 6.4 1 6.7 0 9.5-3.3 9.5-7.9 0-7.2-10-6.5-10-9.9 0-1.2 1-2 3.4-2 2 0 3.7.4 4.7.9l.9-3.8c-1.1-.5-3-.9-5.5-.9-6 0-9 3.3-9 7.6 0 7.1 10.1 6.5 10.1 9.3h.2z"
+                                    transform="translate(10, 10)" />
+                            </svg>
+                            <span class="text-xs text-white/70">Stripe</span>
+                        </div>
+
+                        <!-- Razorpay -->
+                        <div
+                            class="p-4 border border-white/10 rounded hover:border-[#3395FF] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
+                            <svg class="h-8 w-8 mb-3 text-[#3395FF] group-hover:text-white transition-colors"
+                                viewBox="-2 -2 28 28" fill="currentColor">
+                                <path
+                                    d="M22.43 12.33l-9.06-9.82a.85.85 0 0 0-.61-.26H3.6a.85.85 0 0 0-.61 1.44l9.06 9.82a.85.85 0 0 0 .61.26h9.16a.85.85 0 0 0 .61-1.44zM10.84 21.75l9.06-9.82a.85.85 0 0 0-.61-1.44h-9.16a.85.85 0 0 0-.61.26l-9.06 9.82a.85.85 0 0 0 .61 1.44h9.16a.85.85 0 0 0 .61-.26z" />
+                            </svg>
+                            <span class="text-xs text-white/70">Razorpay</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER / CONTACT FORM -->
+        <section id="contact" class="px-6 md:px-20 lg:px-32 py-32">
+            <h2
+                class="text-6xl md:text-9xl font-medium tracking-tighter text-[#2a2a2a] hover:text-[#f1f0ec] transition-colors duration-500 cursor-default">
+                Let's Talk
+            </h2>
+
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-16 border-t border-white/10 pt-16">
+                <!-- Form -->
+                <div>
+                    <div class="space-y-6 max-w-md">
+                        <div>
+                            <label class="block text-xs font-mono text-[#989898] mb-2 uppercase">Your Signal
+                                (Email)</label>
+                            <input type="email" id="user-email" placeholder="enter@email.com"
+                                class="w-full bg-[#1b1b1b] border border-white/10 rounded p-3 text-[#f1f0ec] focus:outline-none focus:border-[#fe5935] transition-colors placeholder:text-[#444]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-mono text-[#989898] mb-2 uppercase">Payload
+                                (Message)</label>
+                            <textarea id="user-message" rows="4" placeholder="Type your message..."
+                                class="w-full bg-[#1b1b1b] border border-white/10 rounded p-3 text-[#f1f0ec] focus:outline-none focus:border-[#fe5935] transition-colors placeholder:text-[#444]"></textarea>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span id="form-status" class="text-xs font-mono text-[#989898]">[AWAITING INPUT]</span>
+                            <button id="send-btn" onclick="sendMessage()"
+                                class="px-8 py-3 bg-[#f1f0ec] text-black font-medium text-sm rounded hover:bg-[#fe5935] hover:text-white transition-all">
+                                EXECUTE TRANSFER
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Socials -->
+                <div class="flex flex-col justify-end items-start md:items-end">
+                    <div class="flex flex-col gap-4 text-right">
+                        <a href="mailto:jeevesh.r4@gmail.com"
+                            class="text-xl text-white hover:text-[#fe5935] transition-colors">jeevesh.r4@gmail.com</a>
+                        <div class="flex gap-6 mt-4 justify-end">
+                            <!-- LinkedIn -->
+                            <a href="https://www.linkedin.com/in/jeevesh-r-6a117a285" target="_blank"
+                                class="text-[#989898] hover:text-[#0077B5] transition-colors" aria-label="LinkedIn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="currentColor" class="w-6 h-6">
+                                    <path
+                                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                                </svg>
+                            </a>
+                            <!-- X (Twitter) -->
+                            <a href="https://x.com/JeeveshR52720" target="_blank"
+                                class="text-[#989898] hover:text-white transition-colors" aria-label="X (Twitter)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="currentColor" class="w-6 h-6">
+                                    <path
+                                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                </svg>
+                            </a>
+                            <!-- GitHub -->
+                            <a href="https://github.com/jeeveshr" target="_blank"
+                                class="text-[#989898] hover:text-[#fe5935] transition-colors" aria-label="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="currentColor" class="w-6 h-6">
+                                    <path
+                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Start Icons
+        lucide.createIcons();
+
+        // Custom Loader Logic
+        const loader = document.getElementById('loader');
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.floor(Math.random() * 5) + 2;
+            if (progress > 100) progress = 100;
+            loader.innerText = progress + '%';
+
+            if (progress === 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    loader.style.visibility = 'hidden';
+                }, 500);
             }
-        }
+        }, 30);
     </script>
 </body>
+
 </html>
