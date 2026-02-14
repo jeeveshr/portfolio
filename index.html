@@ -946,20 +946,38 @@
         bgMusic.volume = 0.35;
         let isMusicPlaying = false;
 
-        musicToggle.addEventListener('click', () => {
-            if (isMusicPlaying) {
-                bgMusic.pause();
-                playIcon.style.display = '';
-                stopIcon.style.display = 'none';
-                btnLabel.textContent = 'Play';
-            } else {
+        function startMusic() {
+            if (!isMusicPlaying) {
                 bgMusic.play();
                 playIcon.style.display = 'none';
                 stopIcon.style.display = '';
                 btnLabel.textContent = 'Stop';
+                isMusicPlaying = true;
             }
-            isMusicPlaying = !isMusicPlaying;
+        }
+
+        function stopMusic() {
+            bgMusic.pause();
+            playIcon.style.display = '';
+            stopIcon.style.display = 'none';
+            btnLabel.textContent = 'Play';
+            isMusicPlaying = false;
+        }
+
+        musicToggle.addEventListener('click', () => {
+            if (isMusicPlaying) { stopMusic(); } else { startMusic(); }
         });
+
+        // Auto-play on first user interaction
+        function autoPlayOnce() {
+            startMusic();
+            ['click', 'scroll', 'touchstart', 'keydown'].forEach(evt =>
+                window.removeEventListener(evt, autoPlayOnce)
+            );
+        }
+        ['click', 'scroll', 'touchstart', 'keydown'].forEach(evt =>
+            window.addEventListener(evt, autoPlayOnce, { once: false })
+        );
 
         // --- SCROLL REVEAL (IntersectionObserver) ---
         const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
