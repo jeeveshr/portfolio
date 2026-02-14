@@ -115,6 +115,228 @@
             color: var(--text-main);
             transition: opacity 0.5s ease, visibility 0.5s;
         }
+
+        /* ===== HERO BACKGROUND VIDEO ===== */
+        .hero-video-wrap {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .hero-video-wrap video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.18;
+            filter: saturate(0.6) brightness(0.5);
+        }
+
+        .hero-video-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, var(--bg-main) 100%);
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.85);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-scale.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ===== TEXT SHIMMER ===== */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .text-shimmer {
+            background: linear-gradient(90deg, #f1f0ec 0%, #fe5935 40%, #f1f0ec 60%, #fe5935 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+
+        /* ===== GLOW PULSE ===== */
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 8px var(--accent-glow), 0 0 20px transparent;
+            }
+
+            50% {
+                box-shadow: 0 0 16px var(--accent-glow), 0 0 40px var(--accent-glow);
+            }
+        }
+
+        .glow-pulse {
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        /* ===== FLOATING PARTICLES ===== */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+        }
+
+        /* ===== MUSIC TOGGLE ===== */
+        #music-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(27, 27, 27, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #music-toggle:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            transform: scale(1.1);
+        }
+
+        #music-toggle svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-main);
+        }
+
+        /* Sound wave bars animation */
+        .sound-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 16px;
+        }
+
+        .sound-bars .bar {
+            width: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+            animation: soundBar 0.8s ease-in-out infinite alternate;
+        }
+
+        .sound-bars .bar:nth-child(1) {
+            height: 6px;
+            animation-delay: 0s;
+        }
+
+        .sound-bars .bar:nth-child(2) {
+            height: 12px;
+            animation-delay: 0.15s;
+        }
+
+        .sound-bars .bar:nth-child(3) {
+            height: 8px;
+            animation-delay: 0.3s;
+        }
+
+        .sound-bars .bar:nth-child(4) {
+            height: 14px;
+            animation-delay: 0.45s;
+        }
+
+        @keyframes soundBar {
+            0% {
+                height: 4px;
+            }
+
+            100% {
+                height: 16px;
+            }
+        }
+
+        .sound-bars.paused .bar {
+            animation: none;
+            height: 4px !important;
+        }
     </style>
 </head>
 
@@ -257,26 +479,34 @@
     <main class="w-full relative">
 
         <!-- HERO SECTION -->
-        <section class="min-h-screen flex flex-col justify-center px-6 md:px-20 lg:px-32 pt-20">
-            <div class="max-w-4xl">
-                <h1 class="text-5xl md:text-8xl font-medium tracking-tight leading-[1.1] mb-8 fade-up text-[#f1f0ec]">
-                    Creative thinking<br>
-                    <span class="text-[#989898]">Vibe Coder.</span>
+        <section class="min-h-screen flex flex-col justify-center px-6 md:px-20 lg:px-32 pt-20 relative">
+            <!-- Background Video -->
+            <div class="hero-video-wrap">
+                <video autoplay muted loop playsinline>
+                    <source src="assets/12902-242487547.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="max-w-4xl relative z-10">
+                <h1 class="text-6xl md:text-8xl font-medium tracking-tight leading-[1.1] mb-8 fade-up">
+                    <span class="text-shimmer">Vibe Coder.</span><br>
+                    <span class="text-[#989898]">Ship Fast. Scale Hard.</span>
                 </h1>
                 <p class="text-lg md:text-xl text-[#989898] max-w-2xl leading-relaxed fade-up delay-100">
-                    I’m <span class="text-white">Jeevesh</span>, a designer & developer. I bridge the gap between design
-                    and code, using tools like <span class="text-[#fe5935]">Framer</span> & <span
-                        class="text-[#fe5935]">Supabase</span>.
+                    I'm <span class="text-white">Jeevesh</span>. I don't just write code; I build at the speed of
+                    thought.
+                    Merging <span class="text-[#fe5935]">React</span> aesthetics with <span
+                        class="text-[#fe5935]">Node.js</span> power to create rapid prototypes that scale.
                 </p>
 
                 <div class="mt-12 flex gap-4 fade-up delay-200">
-                    <div class="w-3 h-3 bg-[#fe5935] rounded-full animate-pulse mt-2"></div>
-                    <p class="text-sm font-mono text-[#989898] uppercase tracking-widest">Available for new projects</p>
+                    <div class="w-3 h-3 bg-[#fe5935] rounded-full glow-pulse mt-2" style="border-radius:50%"></div>
+                    <p class="text-sm font-mono text-[#989898] uppercase tracking-widest">Open for High-Impact Roles</p>
                 </div>
             </div>
 
             <!-- SCROLL INDICATOR -->
-            <div class="absolute bottom-10 right-10 md:right-20 fade-up delay-300 block">
+            <div class="absolute bottom-10 right-10 md:right-20 fade-up delay-300 block z-10">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     class="animate-bounce text-[#989898]">
                     <path d="M12 5v14M19 12l-7 7-7-7" />
@@ -284,207 +514,176 @@
             </div>
         </section>
 
-        <!-- WORK SECTION -->
+        <!-- WORK SECTION: BENTO GRID -->
         <section id="work" class="px-6 md:px-20 lg:px-32 py-24">
-            <h2 class="text-xs font-mono uppercase tracking-widest text-[#989898] mb-12">Selected Work (2024-26)</h2>
+            <h2 class="text-xs font-mono uppercase tracking-widest text-[#989898] mb-12 reveal">Selected Deployments
+            </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-                <!-- Project 1 -->
-                <div class="group cursor-pointer">
-                    <div
-                        class="relative overflow-hidden rounded-lg mb-6 bg-[#1b1b1b] aspect-[4/3] border border-white/5">
-                        <div
-                            class="absolute inset-0 flex items-center justify-center text-[#989898] group-hover:scale-105 transition-transform duration-500">
-                            <!-- Placeholder visual -->
-                            <div class="text-center">
-                                <i data-lucide="bar-chart-2"
-                                    class="w-16 h-16 mx-auto mb-4 text-[#2a2a2a] group-hover:text-[#fe5935] transition-colors"></i>
-                                <span class="text-sm">Sorting Visualizer</span>
+                <!-- LegacyLogic Case Study -->
+                <div
+                    class="group relative bg-[#1b1b1b] rounded-2xl p-8 border border-white/5 hover:border-[#fe5935]/50 transition-all duration-500 overflow-hidden reveal-left">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i data-lucide="server" class="w-32 h-32 text-white"></i>
+                    </div>
+
+                    <div class="relative z-10 flex flex-col h-full justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-6">
+                                <span
+                                    class="px-3 py-1 text-xs font-mono bg-[#fe5935]/10 text-[#fe5935] rounded-full">BACKEND
+                                    ARCHITECTURE</span>
+                                <span class="text-xs text-[#555] font-mono">2025</span>
+                            </div>
+                            <h3 class="text-3xl font-medium text-[#f1f0ec] mb-4">LegacyLogic</h3>
+                            <p class="text-[#989898] leading-relaxed mb-6">
+                                Engineered a modular backend with clear separation of concerns. The goal? <span
+                                    class="text-white">Minimal latency</span> and maximum maintainability.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-8">
+                            <div class="bg-black/40 p-3 rounded border border-white/5">
+                                <div class="text-[#fe5935] text-lg font-bold">15ms</div>
+                                <div class="text-[10px] uppercase text-[#666] tracking-wider">Avg Response</div>
+                            </div>
+                            <div class="bg-black/40 p-3 rounded border border-white/5">
+                                <div class="text-[#fe5935] text-lg font-bold">100%</div>
+                                <div class="text-[10px] uppercase text-[#666] tracking-wider">Uptime</div>
                             </div>
                         </div>
                     </div>
-                    <div
-                        class="flex justify-between items-baseline border-b border-white/10 pb-4 group-hover:border-[#fe5935] transition-colors">
-                        <h3 class="text-2xl font-medium text-[#f1f0ec]">Algorithm Lab</h3>
-                        <span class="text-sm text-[#989898]">2025</span>
-                    </div>
-                    <p class="mt-2 text-[#989898] text-sm">Interactive Data Structure Visualization using JS Canvas.</p>
                 </div>
 
-                <!-- Project 2 -->
-                <div class="group cursor-pointer md:mt-24"> <!-- Staggered layout -->
-                    <div
-                        class="relative overflow-hidden rounded-lg mb-6 bg-[#1b1b1b] aspect-[4/3] border border-white/5">
-                        <div
-                            class="absolute inset-0 flex items-center justify-center text-[#989898] group-hover:scale-105 transition-transform duration-500">
-                            <!-- Placeholder visual -->
-                            <div class="text-center">
-                                <i data-lucide="database"
-                                    class="w-16 h-16 mx-auto mb-4 text-[#2a2a2a] group-hover:text-[#fe5935] transition-colors"></i>
-                                <span class="text-sm">Supabase Connector</span>
+                <!-- HealthLens AI Case Study -->
+                <div
+                    class="group relative bg-[#1b1b1b] rounded-2xl p-8 border border-white/5 hover:border-[#fe5935]/50 transition-all duration-500 overflow-hidden reveal-right">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i data-lucide="scan-face" class="w-32 h-32 text-white"></i>
+                    </div>
+
+                    <div class="relative z-10 flex flex-col h-full justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="px-3 py-1 text-xs font-mono bg-[#fe5935]/10 text-[#fe5935] rounded-full">AI
+                                    INTEGRATION</span>
+                                <span class="text-xs text-[#555] font-mono">2025</span>
+                            </div>
+                            <h3 class="text-3xl font-medium text-[#f1f0ec] mb-4">HealthLens AI</h3>
+                            <p class="text-[#989898] leading-relaxed mb-6">
+                                An end-to-end medical analysis tool. Validates inputs client-side before triggering
+                                complex <span class="text-white">AI inference pipelines</span> for rapid risk
+                                assessment.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-8">
+                            <div class="bg-black/40 p-3 rounded border border-white/5">
+                                <div class="text-[#fe5935] text-lg font-bold">Secure</div>
+                                <div class="text-[10px] uppercase text-[#666] tracking-wider">Image Handling</div>
+                            </div>
+                            <div class="bg-black/40 p-3 rounded border border-white/5">
+                                <div class="text-[#fe5935] text-lg font-bold">Async</div>
+                                <div class="text-[10px] uppercase text-[#666] tracking-wider">Processing</div>
                             </div>
                         </div>
                     </div>
-                    <div
-                        class="flex justify-between items-baseline border-b border-white/10 pb-4 group-hover:border-[#fe5935] transition-colors">
-                        <h3 class="text-2xl font-medium text-[#f1f0ec]">DB Console</h3>
-                        <span class="text-sm text-[#989898]">2025</span>
-                    </div>
-                    <p class="mt-2 text-[#989898] text-sm">Real-time database management interface.</p>
                 </div>
 
             </div>
         </section>
 
-        <!-- ABOUT / SKILLS -->
-        <section id="about" class="px-6 md:px-20 lg:px-32 py-24 bg-[#1b1b1b]">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                <div>
-                    <h2 class="text-4xl md:text-5xl font-medium mb-8 leading-tight">
-                        Visual storytelling through code.
-                    </h2>
-                    <p class="text-[#989898] text-lg leading-relaxed mb-8">
-                        I bridge the gap between design and engineering. My approach is simple: create things that look
-                        beautiful and work flawlessly.
+        <!-- ABOUT & STACK SECTION -->
+        <section id="about" class="px-6 md:px-20 lg:px-32 py-24 bg-[#141414]">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+                <!-- About Me (4 cols) -->
+                <div class="lg:col-span-4 reveal-left">
+                    <h2 class="text-xs font-mono uppercase tracking-widest text-[#989898] mb-8">The Operator</h2>
+                    <h3 class="text-3xl font-medium text-[#f1f0ec] mb-6">BCA Student @ Jyothy Institute.</h3>
+                    <p class="text-[#989898] leading-relaxed mb-6">
+                        I don't fit the "student" mold. I'm a Bangalore-based builder obsessed with velocity.
                     </p>
-
-                    <!-- Database Integration Status -->
-                    <div class="flex items-center gap-3 py-4 px-5 bg-black/20 rounded border border-[#fe5935]/30 w-fit">
-                        <div class="w-2 h-2 rounded-full bg-[#eca400] animate-pulse"></div>
-                        <span class="text-xs text-[#f1f0ec] font-mono">SUPABASE: INITIALIZED</span>
-                    </div>
+                    <p class="text-[#989898] leading-relaxed">
+                        My philosophy is simple: <span class="text-white">Vibe Code</span>. If it doesn't look good, it
+                        doesn't work. If it doesn't ship fast, it doesn't matter.
+                    </p>
                 </div>
 
-                <div>
-                    <div class="flex justify-between items-end mb-8">
-                        <h3 class="text-xs font-mono uppercase tracking-widest text-[#989898]">Tools & Tech</h3>
-                    </div>
+                <!-- Bento Stack (8 cols) -->
+                <div class="lg:col-span-8 reveal-right">
+                    <h2 class="text-xs font-mono uppercase tracking-widest text-[#989898] mb-8">The Arsenal</h2>
 
-                    <!-- Tools Grid -->
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-                        <!-- Figma -->
+                        <!-- Core -->
                         <div
-                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
-                            <svg class="h-8 w-8 mb-3 text-[#989898] group-hover:text-white transition-colors"
-                                viewBox="0 0 38 57" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M19 28.5C19 25.9863 20.0469 23.5756 21.9103 21.7981C23.7738 20.0206 26.3013 19.022 29 19.022C31.6987 19.022 34.2263 20.0206 36.0897 21.7981C37.9531 23.5756 39 25.9863 39 28.5C39 31.0137 37.9531 33.4244 36.0897 35.2019C34.2263 36.9794 31.6987 37.978 29 37.978H19V28.5Z"
-                                    fill="#1ABCFE" />
-                                <path
-                                    d="M19 47.4559C19 44.9422 20.0469 42.5315 21.9103 40.7541C23.7738 38.9766 26.3013 37.978 29 37.978C31.6987 37.978 34.2263 38.9766 36.0897 40.7541C37.9531 42.5315 39 44.9422 39 47.4559C39 49.9696 37.9531 52.3803 36.0897 54.1578C34.2263 55.9353 31.6987 56.9338 29 56.9338H19V47.4559Z"
-                                    fill="#0ACF83" />
-                                <path
-                                    d="M19 0.0441284H9C6.30127 0.0441284 3.77375 1.04273 1.91035 2.82025C0.0469446 4.59778 -1 7.00844 -1 9.52219C-1 12.0359 0.0469446 14.4466 1.91035 16.2241C3.77375 18.0016 6.30127 19.0003 9 19.0003H19V0.0441284Z"
-                                    fill="#F24E1E" />
-                                <path
-                                    d="M19 19.0002H9C6.30127 19.0002 3.77375 19.9989 1.91035 21.7764C0.0469446 23.5539 -1 25.9646 -1 28.4783C-1 30.9921 0.0469446 33.4027 1.91035 35.1802C3.77375 36.9578 6.30127 37.9564 9 37.9564H19V19.0002Z"
-                                    fill="#A259FF" />
-                                <path
-                                    d="M9 37.9564C6.30127 37.9564 3.77375 38.955 1.91035 40.7325C0.0469446 42.51 -1 44.9207 -1 47.4344C-1 49.9482 0.0469446 52.3588 1.91035 54.1363C3.77375 55.9138 6.30127 56.9125 9 56.9125C11.6987 56.9125 14.2263 55.9138 16.0897 54.1363C17.9531 52.3588 19 49.9482 19 47.4344V37.9564H9Z"
-                                    fill="#1ABCFE" />
-                            </svg>
-                            <span class="text-xs text-white/70">Figma</span>
+                            class="col-span-2 md:col-span-2 bg-[#1b1b1b] p-6 rounded-xl border border-white/5 hover:border-[#fe5935]/30 transition-colors reveal-scale">
+                            <div class="text-xs text-[#666] uppercase mb-4 font-mono">Core Ecology</div>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">JavaScript</span>
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">Python</span>
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">Java</span>
+                            </div>
                         </div>
 
-                        <!-- Framer -->
-                        <div
-                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
-                            <svg class="h-8 w-8 mb-3 text-white group-hover:text-[#fe5935] transition-colors"
-                                viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M4 0h16v8h-8zM4 16h8v8zM4 8h8l8 8H4z" />
-                            </svg>
-                            <span class="text-xs text-white/70">Framer</span>
+                        <!-- Frontend -->
+                        <div class="col-span-2 md:col-span-2 bg-[#1b1b1b] p-6 rounded-xl border border-white/5 hover:border-[#fe5935]/30 transition-colors reveal-scale"
+                            style="transition-delay:0.1s">
+                            <div class="text-xs text-[#666] uppercase mb-4 font-mono">Frontend</div>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">React</span>
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">Tailwind</span>
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">HTML/CSS</span>
+                            </div>
                         </div>
 
-                        <!-- Photoshop -->
-                        <div
-                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
-                            <div
-                                class="h-8 w-8 mb-3 border-2 border-[#31A8FF] rounded flex items-center justify-center text-[#31A8FF] font-bold text-sm group-hover:bg-[#31A8FF] group-hover:text-black transition-all">
-                                Ps</div>
-                            <span class="text-xs text-white/70">Photoshop</span>
+                        <!-- Backend & Data -->
+                        <div class="col-span-2 md:col-span-2 bg-[#1b1b1b] p-6 rounded-xl border border-white/5 hover:border-[#fe5935]/30 transition-colors reveal-scale"
+                            style="transition-delay:0.2s">
+                            <div class="text-xs text-[#666] uppercase mb-4 font-mono">Backend & Data</div>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">Node.js</span>
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">Supabase</span>
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">MySQL</span>
+                            </div>
                         </div>
 
-                        <!-- Lightroom -->
-                        <div
-                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
-                            <div
-                                class="h-8 w-8 mb-3 border-2 border-[#31A8FF] rounded flex items-center justify-center text-[#31A8FF] font-bold text-sm group-hover:bg-[#31A8FF] group-hover:text-black transition-all">
-                                Lr</div>
-                            <span class="text-xs text-white/70">Lightroom</span>
-                        </div>
-
-                        <!-- Filmora (Using Generic Video Icon) -->
-                        <div
-                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
-                            <svg class="h-8 w-8 mb-3 text-[#989898] group-hover:text-[#fe5935] transition-colors"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
-                                <line x1="7" y1="2" x2="7" y2="22"></line>
-                                <line x1="17" y1="2" x2="17" y2="22"></line>
-                                <line x1="2" y1="12" x2="22" y2="12"></line>
-                                <line x1="2" y1="7" x2="7" y2="7"></line>
-                                <line x1="2" y1="17" x2="7" y2="17"></line>
-                                <line x1="17" y1="17" x2="22" y2="17"></line>
-                                <line x1="17" y1="7" x2="22" y2="7"></line>
-                            </svg>
-                            <span class="text-xs text-white/70">Filmora</span>
-                        </div>
-
-                        <!-- Supabase -->
-                        <div
-                            class="p-4 border border-white/10 rounded hover:border-[#fe5935] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
-                            <svg class="h-8 w-8 mb-3 text-[#3ECF8E] group-hover:text-white transition-colors"
-                                viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M11.6667 0H1.66669L7.50002 10H1.66669L13.3334 24V14H19.1667L11.6667 0Z" />
-                            </svg>
-                            <span class="text-xs text-white/70">Supabase</span>
-                        </div>
-
-                        <!-- Fiverr -->
-                        <!-- Fiverr -->
-                        <!-- Fiverr -->
-                        <a href="https://www.fiverr.com/jeeveshr489/buying?source=avatar_menu_profile" target="_blank"
-                            class="p-4 border border-white/10 rounded hover:border-[#1DBF73] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414] cursor-none cursor-hover">
-                            <img src="assets/fiverr.png" alt="Fiverr"
-                                class="h-10 w-10 mb-2 object-contain transition-all opacity-100">
-                            <span class="text-xs text-white/70">Hire Me</span>
-                        </a>
-
-                        <!-- Stripe -->
-                        <div
-                            class="p-4 border border-white/10 rounded hover:border-[#635BFF] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
-                            <svg class="h-8 w-8 mb-3 text-[#635BFF] group-hover:text-white transition-colors"
-                                viewBox="0 0 40 40" fill="currentColor">
-                                <path
-                                    d="M14.9 14.7c0 1.9-1.4 2.8-4.4 2.8-3 0-4.9-.5-6.4-1l-.9 3.9c1.2.5 3.8 1 6.4 1 6.7 0 9.5-3.3 9.5-7.9 0-7.2-10-6.5-10-9.9 0-1.2 1-2 3.4-2 2 0 3.7.4 4.7.9l.9-3.8c-1.1-.5-3-.9-5.5-.9-6 0-9 3.3-9 7.6 0 7.1 10.1 6.5 10.1 9.3h.2z"
-                                    transform="translate(10, 10)" />
-                            </svg>
-                            <span class="text-xs text-white/70">Stripe</span>
-                        </div>
-
-                        <!-- Razorpay -->
-                        <div
-                            class="p-4 border border-white/10 rounded hover:border-[#3395FF] transition-colors group flex flex-col items-center justify-center text-center h-32 bg-[#141414]">
-                            <svg class="h-8 w-8 mb-3 text-[#3395FF] group-hover:text-white transition-colors"
-                                viewBox="-2 -2 28 28" fill="currentColor">
-                                <path
-                                    d="M22.43 12.33l-9.06-9.82a.85.85 0 0 0-.61-.26H3.6a.85.85 0 0 0-.61 1.44l9.06 9.82a.85.85 0 0 0 .61.26h9.16a.85.85 0 0 0 .61-1.44zM10.84 21.75l9.06-9.82a.85.85 0 0 0-.61-1.44h-9.16a.85.85 0 0 0-.61.26l-9.06 9.82a.85.85 0 0 0 .61 1.44h9.16a.85.85 0 0 0 .61-.26z" />
-                            </svg>
-                            <span class="text-xs text-white/70">Razorpay</span>
+                        <!-- Tools -->
+                        <div class="col-span-2 md:col-span-2 bg-[#1b1b1b] p-6 rounded-xl border border-white/5 hover:border-[#fe5935]/30 transition-colors reveal-scale"
+                            style="transition-delay:0.3s">
+                            <div class="text-xs text-[#666] uppercase mb-4 font-mono">Force Multipliers</div>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">Git</span>
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">Antigravity</span>
+                                <span
+                                    class="px-3 py-1 bg-black/50 text-[#f1f0ec] text-sm rounded border border-white/10">VS
+                                    Code</span>
+                            </div>
                         </div>
 
                     </div>
                 </div>
+
             </div>
         </section>
 
         <!-- FOOTER / CONTACT FORM -->
         <section id="contact" class="px-6 md:px-20 lg:px-32 py-32">
             <h2
-                class="text-6xl md:text-9xl font-medium tracking-tighter text-[#2a2a2a] hover:text-[#f1f0ec] transition-colors duration-500 cursor-default">
+                class="text-6xl md:text-9xl font-medium tracking-tighter text-[#2a2a2a] hover:text-[#f1f0ec] transition-colors duration-500 cursor-default reveal">
                 Let's Talk
             </h2>
 
@@ -556,11 +755,26 @@
 
     </main>
 
+    <!-- BACKGROUND MUSIC -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="assets/sonican-lo-fi-music-loop-sentimental-jazzy-love-473154.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- MUSIC TOGGLE BUTTON -->
+    <button id="music-toggle" aria-label="Toggle Music">
+        <div class="sound-bars paused" id="sound-bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </button>
+
     <script>
         // Start Icons
         lucide.createIcons();
 
-        // Custom Loader Logic
+        // --- LOADER ---
         const loader = document.getElementById('loader');
         let progress = 0;
         const interval = setInterval(() => {
@@ -576,6 +790,52 @@
                 }, 500);
             }
         }, 30);
+
+        // --- MUSIC TOGGLE ---
+        const bgMusic = document.getElementById('bg-music');
+        const musicToggle = document.getElementById('music-toggle');
+        const soundBars = document.getElementById('sound-bars');
+        bgMusic.volume = 0.35;
+        let isMusicPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                soundBars.classList.add('paused');
+            } else {
+                bgMusic.play();
+                soundBars.classList.remove('paused');
+            }
+            isMusicPlaying = !isMusicPlaying;
+        });
+
+        // --- SCROLL REVEAL (IntersectionObserver) ---
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // --- FLOATING PARTICLES ---
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.bottom = '-10px';
+            const duration = 6 + Math.random() * 8;
+            particle.style.animation = `floatUp ${duration}s linear forwards`;
+            particle.style.width = (2 + Math.random() * 3) + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.opacity = '0';
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), duration * 1000);
+        }
+        setInterval(createParticle, 800);
     </script>
 </body>
 
